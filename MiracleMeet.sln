@@ -18,9 +18,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiracleMeet.Client.Tests", "Tests\MiracleMeet.Client.Tests\MiracleMeet.Client.Tests.csproj", "{791D4F16-C077-4F86-8AE6-FD8B584F1E13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiracleMeet.Server.Tests", "Tests\MiracleMeet.Server.Tests\MiracleMeet.Server.Tests.csproj", "{E70A4A3E-9059-450E-B990-4F89BBABAB0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiracleMeet.Shared.Tests", "Tests\MiracleMeet.Shared.Tests\MiracleMeet.Shared.Tests.csproj", "{7F0791B6-1D93-4A81-91FC-1050BCC5D44C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,12 +50,22 @@ Global
 		{791D4F16-C077-4F86-8AE6-FD8B584F1E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{791D4F16-C077-4F86-8AE6-FD8B584F1E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{791D4F16-C077-4F86-8AE6-FD8B584F1E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70A4A3E-9059-450E-B990-4F89BBABAB0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70A4A3E-9059-450E-B990-4F89BBABAB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70A4A3E-9059-450E-B990-4F89BBABAB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70A4A3E-9059-450E-B990-4F89BBABAB0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0791B6-1D93-4A81-91FC-1050BCC5D44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0791B6-1D93-4A81-91FC-1050BCC5D44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0791B6-1D93-4A81-91FC-1050BCC5D44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0791B6-1D93-4A81-91FC-1050BCC5D44C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{791D4F16-C077-4F86-8AE6-FD8B584F1E13} = {693E6F89-3E2E-4DC2-BAA8-C6C534617AD7}
+		{E70A4A3E-9059-450E-B990-4F89BBABAB0D} = {693E6F89-3E2E-4DC2-BAA8-C6C534617AD7}
+		{7F0791B6-1D93-4A81-91FC-1050BCC5D44C} = {693E6F89-3E2E-4DC2-BAA8-C6C534617AD7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2146714-6925-4037-8ADE-B69C3B259564}
