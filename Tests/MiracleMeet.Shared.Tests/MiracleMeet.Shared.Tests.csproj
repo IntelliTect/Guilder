@@ -4,4 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\MiracleMeet\Shared\MiracleMeet.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
