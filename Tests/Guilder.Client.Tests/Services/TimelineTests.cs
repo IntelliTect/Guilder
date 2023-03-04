@@ -45,7 +45,7 @@ public class TimelineTests
 
         timeline.ReInitialize();
 
-        var expectedSlots = Period.Between(timeline.LowerBound, timeline.UpperBound, PeriodUnits.Minutes).Minutes / 30;
+        var expectedSlots = Period.Between(timeline.LowerBound, timeline.UpperBound, PeriodUnits.Minutes).Minutes / TimelineStore.SlotSizeInMinutes;
 
         Assert.Equal(timeline.LowerBound, timeline.SlotsToDisplay.First().StartInclusive);
         Assert.Equal(timeline.UpperBound, timeline.SlotsToDisplay.Last().EndExclusive);

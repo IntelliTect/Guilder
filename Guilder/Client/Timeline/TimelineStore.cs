@@ -16,6 +16,8 @@ public class TimelineStore
     public IClock Clock { get; }
     public ICurrentTimeZone CurrentTimeZone { get; }
 
+    public static int SlotSizeInMinutes => 15;
+
     public TimelineStore(IClock clock, ICurrentTimeZone currentTimeZone)
     {
         Clock = clock;
@@ -36,7 +38,7 @@ public class TimelineStore
 
         while (slotStart < UpperBound)
         {
-            var slotEnd = slotStart.PlusMinutes(30);
+            var slotEnd = slotStart.PlusMinutes(SlotSizeInMinutes);
             var meeting = InMeeting(slotStart, slotEnd);
 
             if(meeting is not null)
@@ -46,7 +48,7 @@ public class TimelineStore
 
             SlotsToDisplay.Add(new TimelineSlot(slotStart, slotEnd, meeting));
 
-            slotStart = slotStart.PlusMinutes(30);
+            slotStart = slotEnd;
         }
     }
 
