@@ -1,5 +1,4 @@
 using Guilder.Shared;
-using NodaTime;
 
 namespace Guilder.Server.Connectors.Fake;
 
@@ -12,10 +11,7 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
         _clock = clock;
     }
 
-    public Task<Meeting> CreateMeetingAsync(Meeting meeting)
-    {
-        return Task.FromResult(meeting);
-    }
+    public Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting) => Task.FromResult(meeting);
 
     public Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end)
     {
