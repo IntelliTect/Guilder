@@ -32,7 +32,12 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
             new ("Meeting 1",
                 currentSlotStart,
                 currentSlotStart.Plus(Duration.FromMinutes(30)),
-                "Talking about the app")
+                "Talking about the app"),
+
+                        new ("Meeting 2",
+                currentSlotStart.Plus(Duration.FromMinutes(90)),
+                currentSlotStart.Plus(Duration.FromMinutes(90 + 45)),
+                "Talking about the app's utter failure"),
 
         });
 
