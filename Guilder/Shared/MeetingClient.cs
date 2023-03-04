@@ -9,14 +9,9 @@ using System.Threading.Tasks;
 
 namespace Guilder.Shared
 {
-    public class MeetingClient
+    public record class MeetingClient(HttpClient Http)
     {
-        private readonly HttpClient _http;
-
-        public MeetingClient(HttpClient Http)
-        {
-            _http = Http;
-        }
+        private HttpClient Http { get; } = Http;
 
         public async Task<IEnumerable<Meeting>> GetMeetingsForRoomId(string roomId)
         {
