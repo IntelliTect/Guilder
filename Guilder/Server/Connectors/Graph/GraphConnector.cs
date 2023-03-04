@@ -50,7 +50,7 @@ public class GraphConnector : IMeetingRoomConnector
 
     public async Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, Instant start, Instant end)
     {
-        Room? room = await GetRoom(roomId);
+        Room? room = await GetRoomAsync(roomId);
 
         if (room is null) return Array.Empty<Meeting>();
         const string dateTimeFormat = "yyyy-MM-ddTHH:mm:ss";
@@ -94,11 +94,12 @@ public class GraphConnector : IMeetingRoomConnector
         }
         return Array.Empty<Room>();
     }
-
-    private async Task<Room?> GetRoom(string id)
+    
+    
+    public async Task<Room?> GetRoomAsync(string roomId)
     {
         IReadOnlyList<Room> rooms = await GetRoomsAsync();
-        return rooms.FirstOrDefault(room => room.Id == id);
+        return rooms.FirstOrDefault(room => room.Id == roomId);
     }
 
     public async Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting)
@@ -157,6 +158,7 @@ public class GraphConnector : IMeetingRoomConnector
             throw;
         }
     }
+
 }
 
 

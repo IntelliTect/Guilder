@@ -39,6 +39,10 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
 
     }
 
+    public Task<Room?> GetRoomAsync(string roomId) =>
+        GetRoomsAsync().ContinueWith(
+            t => t.Result.FirstOrDefault(r => r.Id == roomId));
+
     public Task<IReadOnlyList<Room>> GetRoomsAsync()
     {
         return Task.FromResult((IReadOnlyList<Room>)new List<Room>()
