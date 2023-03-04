@@ -12,18 +12,15 @@ namespace Guilder.Server.Connectors.Graph;
 
 public class GraphConnector : IMeetingRoomConnector
 {
-    
-    public IOptions<AzureAppOptions> AppOptions { get; set; }
-    public GraphConnector(IOptions<AzureAppOptions> options)
+    private GraphServiceClient GraphClient { get; }
+
+    public GraphConnector(GraphServiceClient graphClient)
     {
-        AppOptions = options;
+        GraphClient = graphClient;
     }
 
     public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
     {
-        GraphServiceClient graphClient = Authentication();
-
-
         //EventCollectionResponse? response = await graphClient.Users.GetByIds.PostAsync.GetAsync((requestConfiguration) =>
         //{
         //    requestConfiguration.QueryParameters.Select = new string[] { "subject", "organizer", "attendees", "start", "end", "location" };
@@ -35,9 +32,7 @@ public class GraphConnector : IMeetingRoomConnector
 
     public async Task<IReadOnlyList<Room>> GetRoomsAsync()
     {
-        GraphServiceClient graphClient = Authentication();
-
-        RoomCollectionResponse? response = await graphClient.Places.GraphRoom
+        RoomCollectionResponse? response = await GraphClient.Places.GraphRoom
                 .GetAsync(requestConfiguration =>
                 {
                     requestConfiguration.QueryParameters.Top = 10;
@@ -49,22 +44,6 @@ public class GraphConnector : IMeetingRoomConnector
         return Array.Empty<Room>();
     }
 
-    private GraphServiceClient Authentication()
-    {
-        var options = new TokenCredentialOptions
-        {
-            AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
-        };
-        var credential = new ClientSecretCredential(
-            tenantId: AppOptions.Value.TenantId,
-            clientId: AppOptions.Value.ClientId,
-            clientSecret: AppOptions.Value.ClientSecret,
-            options
-        );
-        var scopes = new[] { "https://graph.microsoft.com/.default" };
-        var graphClient = new GraphServiceClient(credential, scopes);
-        return graphClient;
-    }
     public async Task<Meeting> CreateMeetingAsync(Meeting meeting)
     {
         GraphServiceClient graphClient = Authentication();

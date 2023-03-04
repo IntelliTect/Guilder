@@ -1,19 +1,16 @@
 using System.Net;
 using System.Text.Json;
-using Guilder.Server.Connectors.Graph;
 using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Graph.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using static System.Net.WebRequestMethods;
 
 namespace Guilder.Server.Tests.Connectors;
 
 public class GraphConnectorTests : IDisposable
 {
-    WebApplicationFactory<Program> Factory { get; } = new();
-    JsonSerializerOptions Options { get; } = new JsonSerializerOptions(
+    private WebApplicationFactory<Program> Factory { get; } = new();
+    private JsonSerializerOptions Options { get; } = new JsonSerializerOptions(
         JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
     public GraphConnectorTests()
