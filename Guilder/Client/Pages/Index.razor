@@ -11,16 +11,19 @@
 
 <PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
 
-    <CurrentMeeting Meeting="TimelineStore.CurrentMeeting"></CurrentMeeting>
-    <Timeline Meetings="_meetings" EventCallbackParam="(() => StateHasChanged())"></Timeline>
+    <CurrentMeeting Meeting="SelectedMeeting"></CurrentMeeting>
+    <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
 
     @code {
     private Room? _room;
 
+    private Meeting? CurrentMeeting { get; set; }
+    private Meeting? SelectedMeeting { get; set; }
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
-    private Timer? RefreshTimer { get; set; }
+    private Timer? MeetingsRefreshTimer { get; set; }
+    private Timer? SelectedMeetingResetTimer { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,13 +35,31 @@
 
         await Refresh();
 
-        RefreshTimer = new Timer(TimerRefresh,
+        MeetingsRefreshTimer = new Timer(TimerRefresh,
             null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        SelectedMeetingResetTimer = new Timer(ResetCurrentMeeting,
+            null,TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
     }
 
     private async void TimerRefresh(object? state)
     {
         await InvokeAsync(() => Refresh());
+    }
+
+    private void SelectNewMeeting(Meeting? newMeeting)
+    {
+        SelectedMeeting = newMeeting;
+        SelectedMeetingResetTimer?.Change(TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
+    }
+
+    private async void ResetCurrentMeeting(object? state)
+    {
+        Console.WriteLine($"Resetting selected meeting to current: {CurrentMeeting?.Name}");
+        await InvokeAsync(() =>
+        {
+            SelectedMeeting = CurrentMeeting;
+            StateHasChanged();
+        });
     }
 
     private async Task Refresh()
@@ -58,10 +79,14 @@
         var now = Clock.GetCurrentInstant();
         Console.WriteLine($"Now is {now}");
         Console.WriteLine($"First meeting {_meetings.FirstOrDefault()?.StartTimeInclusive} to {_meetings.FirstOrDefault()?.EndTimeExclusive}");
+
+        CurrentMeeting = _meetings.FirstOrDefault(x => x.StartTimeInclusive <= now && x.EndTimeExclusive > now);
+        SelectedMeeting = CurrentMeeting;
     }
 
     void IDisposable.Dispose()
     {
-        RefreshTimer?.Dispose();
+        MeetingsRefreshTimer?.Dispose();
+        SelectedMeetingResetTimer?.Dispose();
     }
 }

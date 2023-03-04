@@ -9,8 +9,7 @@
                 @foreach (var slot in TimelineStore.SlotsToDisplay)
                 {
                     <button class="slot-wrapper @(slot.PartOfMeeting is null ? "free" : "busy")" @onclick="(async () => {
-                        TimelineStore.CurrentMeeting = slot.PartOfMeeting;
-                        await EventCallbackParam.InvokeAsync();
+                        await MeetingSelected.InvokeAsync(slot.PartOfMeeting);
                         })">@(slot.StartInclusive.TimeOfDay) </button>
 
                 }
@@ -28,5 +27,5 @@
     }
 
     [Parameter]
-    public EventCallback EventCallbackParam { get;set; }
+    public EventCallback<Meeting?> MeetingSelected { get;set; }
 }
