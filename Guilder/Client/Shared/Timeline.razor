@@ -8,7 +8,7 @@
             <div class="scroller" style="min-width:@(100 * TimelineStore.SlotsToDisplay.Count)px">
                 @foreach (var slot in TimelineStore.SlotsToDisplay)
                 {
-                    <button class="slot-wrapper" style="background-color:@(slot.PartOfMeeting is null ? "green" : "red")">@(slot.StartInclusive.TimeOfDay)) </button>
+                    <button class="slot-wrapper" style="background-color:@(slot.PartOfMeeting is null ? "green" : "red")">@(slot.StartInclusive.TimeOfDay) </button>
                 }
             </div>
         </div>
