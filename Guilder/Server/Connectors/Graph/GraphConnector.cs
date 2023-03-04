@@ -1,7 +1,9 @@
 ﻿using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Identity;
+using Guilder.Server.Authentication;
 using Guilder.Shared;
+using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary.Middleware;
@@ -11,7 +13,11 @@ namespace Guilder.Server.Connectors.Graph;
 
 public class GraphConnector : IMeetingRoomConnector
 {
-
+    public IOptions<AzureAppOptions> AppOptions { get; set; }
+    public GraphConnector(IOptions<AzureAppOptions> options)
+    {
+        AppOptions = options;
+    }
 
     public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
     {
