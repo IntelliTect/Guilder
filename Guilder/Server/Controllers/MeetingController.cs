@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Guilder.Server.Connectors;
+using Guilder.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Guilder.Server.Controllers;
 
@@ -6,9 +8,17 @@ namespace Guilder.Server.Controllers;
 [Route("room/{roomId}/[controller]")]
 public class MeetingController
 {
-    [HttpGet]
-    public IEnumerable<MeetingController> Get(string roomId)
+    public IMeetingRoomConnector RoomConnector { get; }
+
+    public MeetingController(IMeetingRoomConnector roomConnector)
     {
-        return new List<MeetingController>();
+        RoomConnector = roomConnector;
+    }
+
+
+    [HttpGet]
+    public Task<IReadOnlyList<Meeting>> Get(string roomId)
+    {
+        return RoomConnector.GetMeetingsAsync(roomId);
     }
 }
