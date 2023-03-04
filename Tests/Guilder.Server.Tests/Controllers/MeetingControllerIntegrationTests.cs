@@ -5,27 +5,27 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 
-namespace Guilder.Server.Tests.Connectors;
+namespace Guilder.Server.Tests.Controllers;
 
-public class GraphConnectorTests : IDisposable
+public class MeetingControllerIntegrationTests : IDisposable
 {
     private WebApplicationFactory<Program> Factory { get; } = new();
     private JsonSerializerOptions Options { get; } = new JsonSerializerOptions(
         JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
-    public GraphConnectorTests()
+    public MeetingControllerIntegrationTests()
     {
     }
-    
+
     [Fact]
     public async Task CreateMeeting_NewMeeting_Success()
     {
         HttpClient client = Factory.CreateClient();
 
-        
+
         string roomId = "1";
-        Instant expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
-        Instant expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
+        var expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
+        var expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
         Meeting expected = new("1", expectedStart, expectedEnd);
         HttpResponseMessage result = await client.PostAsJsonAsync(
             $"room/{roomId}/meeting", expected, Options);
