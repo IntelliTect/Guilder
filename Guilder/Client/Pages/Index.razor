@@ -5,15 +5,18 @@
 @inject MeetingClient MeetingClient
 @inject IClock Clock
 @inject ICurrentTimeZone CurrentTimeZone
+@inject NavigationManager Navigation
 
-<PageTitle>@_room.Name</PageTitle>
+<PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
 
 <CurrentMeeting Meeting="_currentMeeting"></CurrentMeeting>
 <Timeline Meetings="_meetings"></Timeline>
 
 
-@code {
-    private Room _room = new Room("3a02a800-1e8a-49ef-82f6-be60e1147fdd", "HumperdinksCastle", "hi@intellitect.com");
+    @code {
+    private string? _roomId;
+
+    private Room? _room;
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
@@ -23,6 +26,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Navigation.TryGetQueryString("roomId", out string? roomId);
+
+        _roomId = roomId ?? "3a02a800-1e8a-49ef-82f6-be60e1147fdd";
+        _room = new Room(_roomId, "Battle of Wits", "hi@intellitect.com");
+
         await Refresh();
 
         RefreshTimer = new Timer(TimerRefresh,
@@ -36,10 +44,15 @@
 
     private async Task Refresh()
     {
+        if(_roomId is null)
+        {
+            return;
+        }
+
         var current = Clock.GetCurrentInstant().InZone(CurrentTimeZone.TimeZone).Date;
         var startOfDay = current.AtStartOfDayInZone(CurrentTimeZone.TimeZone);
         
-        _meetings = await MeetingClient.GetFreeBusyForRoomId("3a02a800-1e8a-49ef-82f6-be60e1147fdd",
+        _meetings = await MeetingClient.GetFreeBusyForRoomId(_roomId,
             startOfDay.ToInstant(),
             startOfDay.Plus(Duration.FromDays(1)).ToInstant());
 
