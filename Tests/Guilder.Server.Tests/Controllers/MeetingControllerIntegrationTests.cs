@@ -4,6 +4,8 @@ namespace Guilder.Server.Tests.Controllers;
 
 public class MeetingControllerIntegrationTests : IDisposable
 {
+    (string Name, string Id) BattleOfWits = ("1. Battle of Wits", "3a02a800-1e8a-49ef-82f6-be60e1147fdd");
+    
     private WebApplicationFactory<Program> Factory { get; } = new();
 
     [Fact]
@@ -11,12 +13,12 @@ public class MeetingControllerIntegrationTests : IDisposable
     {
         MeetingClient client = new(Factory.CreateClient());
 
-        string roomId = "1";
+
         Instant expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
         Instant expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
         Meeting expected = new("Name", expectedStart, expectedEnd);
 
-        Meeting? actual = await client.CreateMeeting(roomId, expected);
+        Meeting? actual = await client.CreateMeeting(BatttleOfWits.Id, expected);
         
         Assert.Equal(expected, actual);
     }

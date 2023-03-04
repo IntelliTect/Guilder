@@ -100,14 +100,61 @@ public class GraphConnector : IMeetingRoomConnector
         return rooms.FirstOrDefault(room => room.Id == id);
     }
 
-    public async Task<Meeting> CreateMeetingAsync(Meeting meeting)
+    public async Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting)
     {
-        // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
+        try
+        {
+            // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
 
-        //graphClient.Places.GraphRoom.
-        //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
-        await Task.Yield();
-        return meeting;
+            //graphClient.Places.GraphRoom.
+            //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
+
+            OnlineMeeting requestBody = new OnlineMeeting
+            {
+                StartDateTime = meeting.StartTimeInclusive.ToDateTimeOffset(),
+                EndDateTime = meeting.EndTimeExclusive.ToDateTimeOffset(),
+                Subject = meeting.Name
+            };
+
+            Event appointment = new Event();
+            appointment.Subject = meeting.Name;
+            // appointment.Body = new ItemBody(meeting.Description, ContentType.Text);
+            appointment.Start = meeting.StartTimeInclusive.ToDateTimeOffset().ToDateTimeTimeZone();
+            appointment.End = meeting.EndTimeExclusive.ToDateTimeOffset().ToDateTimeTimeZone();
+
+            IReadOnlyList<Room> room = await GetRoomsAsync();
+            string? userId = await GetUserId(room.First(item => item.Id == roomId));
+
+            //var result = await GraphClient.Users[userId.Value.First().Id].GetAsync((requestConfiguration) => 
+            //{ 
+            //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual"); 
+            //    requestConfiguration.QueryParameters.Expand = new[] { "calendar" }; 
+            //}); 
+            Calendar? calendar = await GraphClient.Users[userId].Calendar.GetAsync((requestConfiguration) =>
+            {
+                requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
+            });
+            //var calResult = await GraphClient.Users[result.Value.First().Id].Calendar.Events.GetAsync(); 
+
+            //Task<OnlineMeetingCollectionResponse?> user =
+            //    GraphClient.Users[userId].Calendar.GetAsync( (requestConfiguration) =>
+            //{
+            //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
+            //});
+            //int beforeCount = calendar.Events.Count;
+            //calendar.Events.Add(appointment);
+            //int afterCount = calendar.Events.Count;
+
+
+            //var result = await me.OnlineMeetings.PostAsync(requestBody);
+            return meeting;
+
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 }
 

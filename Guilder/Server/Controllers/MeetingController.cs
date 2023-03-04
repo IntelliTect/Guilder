@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Guilder.Server.Connectors;
 using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -31,5 +31,5 @@ public class MeetingsController
     }
 
     [HttpPost]
-    public Task<Meeting> CreateMeeting(string roomId, [FromBody]Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
+    public Task<Meeting> CreateMeeting(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(roomId, meeting);
 }
