@@ -14,8 +14,6 @@
 
 
     @code {
-    private string? _roomId;
-
     private Room? _room;
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
@@ -28,8 +26,9 @@
     {
         Navigation.TryGetQueryString("roomId", out string? roomId);
 
-        _roomId = roomId ?? "3a02a800-1e8a-49ef-82f6-be60e1147fdd";
-        _room = new Room(_roomId, "Battle of Wits", "hi@intellitect.com");
+        roomId ??= "3a02a800-1e8a-49ef-82f6-be60e1147fdd";
+
+        _room = await MeetingClient.GetRoomAsync(roomId);
 
         await Refresh();
 
@@ -44,7 +43,7 @@
 
     private async Task Refresh()
     {
-        if(_roomId is null)
+        if(_room is null)
         {
             return;
         }
@@ -52,7 +51,7 @@
         var current = Clock.GetCurrentInstant().InZone(CurrentTimeZone.TimeZone).Date;
         var startOfDay = current.AtStartOfDayInZone(CurrentTimeZone.TimeZone);
         
-        _meetings = await MeetingClient.GetFreeBusyForRoomId(_roomId,
+        _meetings = await MeetingClient.GetFreeBusyForRoomId(_room.Id,
             startOfDay.ToInstant(),
             startOfDay.Plus(Duration.FromDays(1)).ToInstant());
 
