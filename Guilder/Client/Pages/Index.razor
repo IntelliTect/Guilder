@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Guilder.Shared;
 @using NodaTime;
+@implements IDisposable;
 @inject MeetingClient MeetingClient
 @inject IClock Clock
 
@@ -17,7 +18,22 @@
 
     private Meeting? _currentMeeting;
 
+    private Timer? RefreshTimer { get; set; }
+
     protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+
+        RefreshTimer = new Timer(TimerRefresh,
+            null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+    }
+
+    private async void TimerRefresh(object? state)
+    {
+        await InvokeAsync(() => Refresh());
+    }
+
+    private async Task Refresh()
     {
         _meetings = await MeetingClient.GetFreeBusyForRoomId("3a02a800-1e8a-49ef-82f6-be60e1147fdd", new NodaTime.LocalDate(2023, 03, 03));
 
@@ -26,5 +42,10 @@
         Console.WriteLine($"First meeting {_meetings.FirstOrDefault()?.StartTimeInclusive} to {_meetings.FirstOrDefault()?.EndTimeExclusive}");
 
         _currentMeeting = _meetings.FirstOrDefault(x => x.StartTimeInclusive <= now && x.EndTimeExclusive > now);
+    }
+
+    void IDisposable.Dispose()
+    {
+        RefreshTimer?.Dispose();
     }
 }
