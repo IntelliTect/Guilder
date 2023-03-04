@@ -30,6 +30,10 @@ jobs:
       - name: dotnet build
         run: dotnet build --configuration Release -p:Version="${{ env.version }}"
 
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: dotnet test
         run: dotnet test --configuration Release --no-build
         
