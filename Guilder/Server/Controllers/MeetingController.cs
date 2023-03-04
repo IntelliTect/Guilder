@@ -23,9 +23,9 @@ public class MeetingsController
         return await RoomConnector.GetFreeBusyAsync(roomId, date.ToDateTime(TimeOnly.MinValue), date.ToDateTime(TimeOnly.MaxValue));
     }
 
-    [HttpGet("{date}")]
+    [HttpGet()]
     // Default: Humperdink Castle Room Id
-    public async Task<IReadOnlyList<Meeting>> GetMeetings([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId, DateOnly date)
+    public async Task<IReadOnlyList<Meeting>> GetMeetings([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId)
     {
         return await RoomConnector.GetMeetingsAsync(roomId);
     }

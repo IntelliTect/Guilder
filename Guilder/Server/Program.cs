@@ -3,7 +3,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
-
+using Guilder.Server.Connectors.Fake;
 using Guilder.Server.Connectors.Graph;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
@@ -31,8 +31,8 @@ public class Program
             });
         builder.Services.AddRazorPages();
 
-        builder.Services.AddScoped<IMeetingRoomConnector, GraphConnector>();
-        //builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
+        //builder.Services.AddScoped<IMeetingRoomConnector, GraphConnector>();
+        builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
 
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 

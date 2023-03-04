@@ -11,7 +11,7 @@ public class TimelineStore
 
     public List<TimelineSlot> SlotsToDisplay { get; private set; } = new List<TimelineSlot>();
 
-    private IEnumerable<Meeting> Meetings { get; set; } = new List<Meeting>();
+    public IEnumerable<Meeting> Meetings { get; set; } = new List<Meeting>();
 
     public IClock Clock { get; }
     public ICurrentTimeZone CurrentTimeZone { get; }

@@ -13,5 +13,9 @@
 
 @code {
     [Parameter]
-    public IEnumerable<Meeting> Meetings { set { TimelineStore.SetMeetings(value); } }
+    public IEnumerable<Meeting> Meetings 
+    {
+        get => TimelineStore.Meetings;
+        set => TimelineStore.SetMeetings(value);
+    }
 }
