@@ -10,6 +10,7 @@ public class TimelineStore
     public List<TimelineSlot> SlotsToDisplay { get; private set; } = new List<TimelineSlot>();
 
     public IEnumerable<Meeting> Meetings { get; set; } = new List<Meeting>();
+    public Meeting? CurrentMeeting { get; set; }
 
     public IClock Clock { get; }
     public ICurrentTimeZone CurrentTimeZone { get; }
@@ -20,6 +21,7 @@ public class TimelineStore
     {
         Clock = clock;
         CurrentTimeZone = currentTimeZone;
+        Console.WriteLine("Creating Timeline");
     }
 
     public void ReInitialize()

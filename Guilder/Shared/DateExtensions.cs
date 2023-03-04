@@ -6,6 +6,6 @@
 
         public static Instant GetSlotStart(this Instant instant) => instant.InUtc().LocalDateTime.GetSlotStart().InUtc().ToInstant();
 
-        public static LocalDateTime GetSlotStart(this LocalDateTime dateTime) => new LocalDateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, (dateTime.Minute / 30) * 30);
+        public static LocalDateTime GetSlotStart(this LocalDateTime dateTime) => new(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, (dateTime.Minute / 30) * 30);
     }
 }

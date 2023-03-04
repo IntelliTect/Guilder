@@ -8,7 +8,11 @@
             <div class="scroller" style="min-width:@(100 * TimelineStore.SlotsToDisplay.Count)px">
                 @foreach (var slot in TimelineStore.SlotsToDisplay)
                 {
-                    <button class="slot-wrapper @(slot.PartOfMeeting is null ? "free" : "busy")" onclick="">@(slot.StartInclusive.TimeOfDay) </button>
+                    <button class="slot-wrapper @(slot.PartOfMeeting is null ? "free" : "busy")" @onclick="(async () => {
+                        TimelineStore.CurrentMeeting = slot.PartOfMeeting;
+                        await EventCallbackParam.InvokeAsync();
+                        })">@(slot.StartInclusive.TimeOfDay) </button>
+
                 }
             </div>
         </div>
@@ -22,4 +26,7 @@
         get => TimelineStore.Meetings;
         set => TimelineStore.SetMeetings(value);
     }
+
+    [Parameter]
+    public EventCallback EventCallbackParam { get;set; }
 }

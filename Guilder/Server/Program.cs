@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Console;
 using NodaTime.Serialization.SystemTextJson;
 
 namespace Guilder.Server;
@@ -11,7 +12,7 @@ public class Program
         builder.Logging
             .AddConsole()
             // Filter out Request Starting/Request Finished noise:
-            /*.AddFilter<ConsoleLoggerProvider>("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning)*/;
+            .AddFilter<ConsoleLoggerProvider>("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning);
 
         builder.Configuration.AddGuilderConfiguration(builder.Environment.IsDevelopment());
 

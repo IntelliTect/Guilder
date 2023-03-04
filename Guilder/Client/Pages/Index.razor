@@ -1,4 +1,5 @@
-﻿@page "/"
+@page "/"
+@using Guilder.Client.Services;
 @using Guilder.Shared;
 @using NodaTime;
 @implements IDisposable;
@@ -6,19 +7,18 @@
 @inject IClock Clock
 @inject ICurrentTimeZone CurrentTimeZone
 @inject NavigationManager Navigation
+@inject TimelineStore TimelineStore
 
 <PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
 
-<CurrentMeeting Meeting="_currentMeeting"></CurrentMeeting>
-<Timeline Meetings="_meetings"></Timeline>
-
+    <CurrentMeeting Meeting="TimelineStore.CurrentMeeting"></CurrentMeeting>
+    <Timeline Meetings="_meetings" EventCallbackParam="(() => StateHasChanged())"></Timeline>
 
     @code {
     private Room? _room;
 
-    private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
-    private Meeting? _currentMeeting;
+    private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
     private Timer? RefreshTimer { get; set; }
 
@@ -43,14 +43,14 @@
 
     private async Task Refresh()
     {
-        if(_room is null)
+        if (_room is null)
         {
             return;
         }
 
         var current = Clock.GetCurrentInstant().InZone(CurrentTimeZone.TimeZone).Date;
         var startOfDay = current.AtStartOfDayInZone(CurrentTimeZone.TimeZone);
-        
+
         _meetings = await MeetingClient.GetFreeBusyForRoomId(_room.Id,
             startOfDay.ToInstant(),
             startOfDay.Plus(Duration.FromDays(1)).ToInstant());
@@ -58,8 +58,6 @@
         var now = Clock.GetCurrentInstant();
         Console.WriteLine($"Now is {now}");
         Console.WriteLine($"First meeting {_meetings.FirstOrDefault()?.StartTimeInclusive} to {_meetings.FirstOrDefault()?.EndTimeExclusive}");
-
-        _currentMeeting = _meetings.FirstOrDefault(x => x.StartTimeInclusive <= now && x.EndTimeExclusive > now);
     }
 
     void IDisposable.Dispose()
