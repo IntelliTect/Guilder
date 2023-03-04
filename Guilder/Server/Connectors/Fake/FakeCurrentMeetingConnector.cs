@@ -13,7 +13,7 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
 
     public Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting) => Task.FromResult(meeting);
 
-    public Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end)
+    public Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, Instant start, Instant end)
     {
         return GetMeetingsAsync(roomId);
     }

@@ -48,7 +48,7 @@ public class GraphConnector : IMeetingRoomConnector
         }))?.Value?.First().Id) ?? throw new InvalidOperationException("User associated with room not found");
     }
 
-    public async Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end)
+    public async Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, Instant start, Instant end)
     {
         Room? room = await GetRoom(roomId);
 
@@ -59,12 +59,12 @@ public class GraphConnector : IMeetingRoomConnector
             Schedules = new() { room.Email },
             StartTime = new DateTimeTimeZone
             {
-                DateTime = start.ToUniversalTime().ToString(dateTimeFormat),
+                DateTime = start.ToDateTimeUtc().ToString(dateTimeFormat),
                 TimeZone = "UTC"
             },
             EndTime = new DateTimeTimeZone
             {
-                DateTime = end.ToUniversalTime().ToString(dateTimeFormat),
+                DateTime = end.ToDateTimeUtc().ToString(dateTimeFormat),
                 TimeZone = "UTC"
             },
             AvailabilityViewInterval = 15,

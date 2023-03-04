@@ -7,5 +7,5 @@ public interface IMeetingRoomConnector
     Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting);
     Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId);
     Task<IReadOnlyList<Room>> GetRoomsAsync();
-    Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end);
+    Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, Instant start, Instant end);
 }

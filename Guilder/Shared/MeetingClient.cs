@@ -24,10 +24,10 @@ public class MeetingClient
         return response ?? Array.Empty<Meeting>();
     }
 
-    public async Task<IReadOnlyList<Meeting>> GetFreeBusyForRoomId(string roomId, LocalDate date)
+    public async Task<IReadOnlyList<Meeting>> GetFreeBusyForRoomId(string roomId, Instant start, Instant end)
     {
         var response = await Http.GetFromJsonAsync<IReadOnlyList<Meeting>>(
-            $"room/{roomId}/meetings/FreeBusy/{date}", Options);
+            $"room/{roomId}/meetings/FreeBusy?start={start}&end={end}", Options);
 
         return response ?? Array.Empty<Meeting>();
     }

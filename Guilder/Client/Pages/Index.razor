@@ -4,6 +4,7 @@
 @implements IDisposable;
 @inject MeetingClient MeetingClient
 @inject IClock Clock
+@inject ICurrentTimeZone CurrentTimeZone
 
 <PageTitle>@_room.Name</PageTitle>
 
@@ -35,7 +36,12 @@
 
     private async Task Refresh()
     {
-        _meetings = await MeetingClient.GetFreeBusyForRoomId("3a02a800-1e8a-49ef-82f6-be60e1147fdd", new NodaTime.LocalDate(2023, 03, 03));
+        var current = Clock.GetCurrentInstant().InZone(CurrentTimeZone.TimeZone).Date;
+        var startOfDay = current.AtStartOfDayInZone(CurrentTimeZone.TimeZone);
+        
+        _meetings = await MeetingClient.GetFreeBusyForRoomId("3a02a800-1e8a-49ef-82f6-be60e1147fdd",
+            startOfDay.ToInstant(),
+            startOfDay.Plus(Duration.FromDays(1)).ToInstant());
 
         var now = Clock.GetCurrentInstant();
         Console.WriteLine($"Now is {now}");
