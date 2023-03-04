@@ -31,23 +31,5 @@ public class MeetingsController
     }
 
     [HttpPost]
-    public Task<Meeting> CreateMeeting(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
-}
-
-[ApiController]
-[Route("rooms")]
-public class RoomsController
-{
-    public IMeetingRoomConnector RoomConnector { get; }
-
-    public RoomsController(IMeetingRoomConnector roomConnector)
-    {
-        RoomConnector = roomConnector;
-    }
-
-    [HttpGet]
-    public async Task<IReadOnlyList<Room>> Get()
-    {
-        return await RoomConnector.GetRoomsAsync();
-    }
+    public Task<Meeting> CreateMeeting(string roomId, [FromBody]Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
 }

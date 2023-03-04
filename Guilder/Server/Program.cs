@@ -4,7 +4,6 @@ using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Fake;
-using Guilder.Server.Connectors.Graph;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using NodaTime;
@@ -123,7 +122,10 @@ public class Program
         }
 
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(opts =>
+        {
+            opts.ConfigObject.TryItOutEnabled = true;
+        });
 
         app.UseHttpsRedirection();
 

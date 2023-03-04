@@ -1,11 +1,14 @@
 ﻿using System.Text.Json;
-using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 
 namespace Guilder.Shared;
 
 public class MeetingClient
 {
+    private static JsonSerializerOptions Options { get; }
+        = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                .ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+
     private HttpClient Http { get; }
 
     public MeetingClient(HttpClient http)
@@ -15,21 +18,27 @@ public class MeetingClient
 
     public async Task<IReadOnlyList<Meeting>> GetMeetingsForRoomId(string roomId)
     {
-        var options = new JsonSerializerOptions(
-            JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         var response = await Http.GetFromJsonAsync<IReadOnlyList<Meeting>>(
-            $"room/{roomId}/Meetings", options);
+            $"room/{roomId}/meetings", Options);
 
-        return response ?? new List<Meeting>();
+        return response ?? Array.Empty<Meeting>();
     }
 
     public async Task<IReadOnlyList<Meeting>> GetFreeBusyForRoomId(string roomId, LocalDate date)
     {
-        var options = new JsonSerializerOptions(
-            JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         var response = await Http.GetFromJsonAsync<IReadOnlyList<Meeting>>(
-            $"room/{roomId}/Meetings/FreeBusy/{date}", options);
+            $"room/{roomId}/meetings/FreeBusy/{date}", Options);
 
         return response ?? Array.Empty<Meeting>();
+    }
+
+    public async Task<Meeting?> CreateMeeting(string roomId, Meeting meeting)
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"room/{roomId}/meetings", meeting, Options);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<Meeting>(Options);
+        }
+        return null;
     }
 }

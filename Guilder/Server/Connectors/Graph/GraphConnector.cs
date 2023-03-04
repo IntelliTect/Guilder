@@ -72,8 +72,8 @@ public class GraphConnector : IMeetingRoomConnector
         {
             return freeBusyResults.SelectMany(scheduleInformation => scheduleInformation.ScheduleItems ?? Enumerable.Empty<ScheduleItem>())
                 .Select(scheduleItem => new Meeting(scheduleItem.Subject ?? "Meeting",
-                                                    NodaTime.Instant.FromDateTimeOffset(scheduleItem.Start.ToDateTimeOffset()),
-                                                    NodaTime.Instant.FromDateTimeOffset(scheduleItem.End.ToDateTimeOffset()),
+                                                    Instant.FromDateTimeOffset(scheduleItem.Start.ToDateTimeOffset()),
+                                                    Instant.FromDateTimeOffset(scheduleItem.End.ToDateTimeOffset()),
                                                     scheduleItem.Status.ToString())).ToList();
         }
 
@@ -106,11 +106,8 @@ public class GraphConnector : IMeetingRoomConnector
 
         //graphClient.Places.GraphRoom.
         //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
-
+        await Task.Yield();
         return meeting;
-
-
-
     }
 }
 
