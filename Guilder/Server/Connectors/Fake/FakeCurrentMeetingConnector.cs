@@ -12,6 +12,8 @@ namespace Guilder.Server.Connectors.Fake
             _clock = clock;
         }
 
+        public Task<Meeting> CreateMeetingAsync(Meeting meeting) => throw new NotImplementedException();
+
         public Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
         {
             var currentSlotStart = _clock.GetCurrentInstant().GetSlotStart();

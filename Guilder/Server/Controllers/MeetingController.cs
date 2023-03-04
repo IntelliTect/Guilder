@@ -1,6 +1,7 @@
 ﻿using Guilder.Server.Connectors;
 using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph.Education.Classes.Item.Assignments.Item.Submissions.Item.Return;
 
 namespace Guilder.Server.Controllers;
 
@@ -21,4 +22,7 @@ public class MeetingController
         await RoomConnector.GetRoomsAsync();
         return await RoomConnector.GetMeetingsAsync(roomId);
     }
+
+    [HttpPost]
+    public Task<Meeting> Post(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
 }

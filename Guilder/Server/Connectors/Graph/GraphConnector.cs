@@ -12,6 +12,7 @@ namespace Guilder.Server.Connectors.Graph;
 
 public class GraphConnector : IMeetingRoomConnector
 {
+    
     public IOptions<AzureAppOptions> AppOptions { get; set; }
     public GraphConnector(IOptions<AzureAppOptions> options)
     {
@@ -64,16 +65,15 @@ public class GraphConnector : IMeetingRoomConnector
         var graphClient = new GraphServiceClient(credential, scopes);
         return graphClient;
     }
-    public async Task<Meeting> CreateMeetingAsync(
-        string roomId, Instant expectedStart, Instant expectedEnd, string? description = null)
+    public async Task<Meeting> CreateMeetingAsync(Meeting meeting)
     {
-        // GraphServiceClient graphClient = Authentication();
+        GraphServiceClient graphClient = Authentication();
         // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
 
         //graphClient.Places.GraphRoom.
         //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
 
-        return new Meeting("1", expectedStart, expectedEnd, description);
+        return meeting;
 
 
 
