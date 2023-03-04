@@ -17,7 +17,7 @@ public class MeetingsController
     }
 
     [HttpGet("FreeBusy")]
-    // Default: Humperdink Castle Room Id
+    // Default: Battle Of Wits Room Id
     public async Task<IReadOnlyList<Meeting>> GetFreeBusy([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId, 
         Instant start, Instant end)
     {
@@ -25,7 +25,7 @@ public class MeetingsController
     }
 
     [HttpGet()]
-    // Default: Humperdink Castle Room Id
+    // Default: Battle Of Wits Room Id
     public async Task<IReadOnlyList<Meeting>> GetMeetings([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId)
     {
         return await RoomConnector.GetMeetingsAsync(roomId);
