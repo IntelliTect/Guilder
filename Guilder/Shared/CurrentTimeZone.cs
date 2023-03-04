@@ -1,5 +1,3 @@
-﻿using NodaTime;
-
-namespace Guilder.Shared;
+﻿namespace Guilder.Shared;
 
 public record CurrentTimeZone(DateTimeZone TimeZone) : ICurrentTimeZone;

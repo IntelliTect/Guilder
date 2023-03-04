@@ -1,6 +1,4 @@
-﻿using NodaTime;
-
-namespace Guilder.Shared
+﻿namespace Guilder.Shared
 {
     public static class DateExtensions
     {

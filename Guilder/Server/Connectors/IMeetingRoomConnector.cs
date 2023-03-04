@@ -1,5 +1,3 @@
-using Guilder.Shared;
-
 namespace Guilder.Server.Connectors;
 
 public interface IMeetingRoomConnector

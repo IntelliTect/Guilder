@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using Guilder.Server.Connectors;
-using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Guilder.Server.Controllers;
@@ -18,7 +17,7 @@ public class MeetingsController
 
     [HttpGet("FreeBusy")]
     // Default: Battle Of Wits Room Id
-    public async Task<IReadOnlyList<Meeting>> GetFreeBusy([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId, 
+    public async Task<IReadOnlyList<Meeting>> GetFreeBusy([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId,
         Instant start, Instant end)
     {
         return await RoomConnector.GetFreeBusyAsync(roomId, start, end);

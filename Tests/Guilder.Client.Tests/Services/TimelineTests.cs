@@ -1,6 +1,4 @@
 ﻿using Guilder.Client.Services;
-using Guilder.Shared;
-using NodaTime;
 
 namespace Guilder.Client.Tests.Services;
 

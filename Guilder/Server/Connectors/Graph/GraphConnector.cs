@@ -1,4 +1,3 @@
-using Guilder.Shared;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Graph.Users.Item.Calendar.GetSchedule;
@@ -33,7 +32,7 @@ public class GraphConnector : IMeetingRoomConnector
             });
             var calResult = await GraphClient.Users[userId].Calendar.Events.GetAsync();
         }
-        catch (Exception )
+        catch (Exception)
         {
             throw;
         }
@@ -153,7 +152,7 @@ public class GraphConnector : IMeetingRoomConnector
 
 
         }
-        catch (Exception )
+        catch (Exception)
         {
             throw;
         }

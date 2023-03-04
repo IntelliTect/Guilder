@@ -1,6 +1,4 @@
 ﻿using Guilder.Client.Timeline;
-using Guilder.Shared;
-using NodaTime;
 
 namespace Guilder.Client.Services;
 
@@ -41,7 +39,7 @@ public class TimelineStore
             var slotEnd = slotStart.PlusMinutes(SlotSizeInMinutes);
             var meeting = InMeeting(slotStart, slotEnd);
 
-            if(meeting is not null)
+            if (meeting is not null)
             {
                 Console.WriteLine($"Meeting {meeting.Name} placed in {slotStart} - {slotEnd} slot");
             }
