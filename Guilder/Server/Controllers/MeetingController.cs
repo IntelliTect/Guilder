@@ -24,5 +24,5 @@ public class MeetingController
     }
 
     [HttpPost]
-    public Task<Meeting> Post(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
+    public Task<Meeting> CreateMeeting(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(meeting);
 }
