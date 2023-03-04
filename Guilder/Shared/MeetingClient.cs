@@ -42,8 +42,11 @@ public class MeetingClient
         return null;
     }
 
-    public async Task<Room?> GetRoomAsync(string roomId) =>
-        await Http.GetFromJsonAsync<Room>($"rooms/{roomId}", Options);
-
+    public async Task<Room?> GetRoomAsync(string roomId)
+    {
+        return await Http.GetFromJsonAsync<Room?>($"rooms/{roomId}", Options);
+        //var result = await Http.GetAsync($"rooms/{roomId}");
+        //return JsonSerializer.Deserialize<Room?>(result?.Content?.ToString(), Options);
+    }
 }
 

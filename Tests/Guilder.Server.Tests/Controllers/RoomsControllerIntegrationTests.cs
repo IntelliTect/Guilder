@@ -13,11 +13,12 @@ public class RoomsControllerIntegrationTests : IDisposable
             "1. Battle of Wits",
             "battleofwits@IntelliTect.com");
     
-    private WebApplicationFactory<Program> Factory { get; } = new();
+    private WebApplicationFactory Factory { get; } = new();
 
-    //[Fact]
+    [Fact]
     public async Task GetRoom_BattleofWits_Success()
     {
+        Factory.Connector = "MicrosoftGraph";
         Room expected = new(BattleOfWits.Id, BattleOfWits.Name, BattleOfWits.Email);
         MeetingClient client = new(Factory.CreateClient());
 

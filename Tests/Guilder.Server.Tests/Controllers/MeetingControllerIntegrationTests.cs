@@ -5,7 +5,7 @@ public class MeetingControllerIntegrationTests : IDisposable
 {
     (string Name, string Id) BattleOfWits = ("1. Battle of Wits", "3a02a800-1e8a-49ef-82f6-be60e1147fdd");
 
-    private WebApplicationFactory<Program> Factory { get; } = new();
+    private WebApplicationFactory Factory { get; } = new();
 
     [Fact]
     public async Task CreateMeeting_NewMeeting_Success()

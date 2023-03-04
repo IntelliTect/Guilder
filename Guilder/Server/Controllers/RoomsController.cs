@@ -21,8 +21,6 @@ public class RoomsController
     }
 
     [HttpGet("{roomId}")]
-    public async Task<Room?> GetRoomAsync(string roomId)
-    {
-        return await RoomConnector.GetRoomAsync(roomId);
-    }
+    public async Task<Room?> GetRoomAsync(string roomId) =>
+        await RoomConnector.GetRoomAsync(roomId);
 }
