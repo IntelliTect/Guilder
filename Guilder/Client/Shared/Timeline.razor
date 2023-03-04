@@ -1,0 +1,14 @@
+﻿@using Guilder.Client.Services;
+@using Guilder.Shared;
+@inject TimelineStore TimelineStore
+
+<div class="card">
+    <div class="timeline-wrapper">
+        
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<Meeting> Meetings { set { TimelineStore.SetMeetings(value); } }
+}
