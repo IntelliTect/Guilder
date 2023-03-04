@@ -36,7 +36,15 @@ public class TimelineStore
 
         while (slotStart < UpperBound)
         {
-            SlotsToDisplay.Add(new TimelineSlot(slotStart, slotStart.PlusMinutes(30)));
+            var slotEnd = slotStart.PlusMinutes(30);
+            var meeting = InMeeting(slotStart, slotEnd);
+
+            if(meeting is not null)
+            {
+                Console.WriteLine($"Meeting {meeting.Name} placed in {slotStart} - {slotEnd} slot");
+            }
+
+            SlotsToDisplay.Add(new TimelineSlot(slotStart, slotEnd, meeting));
 
             slotStart = slotStart.PlusMinutes(30);
         }
@@ -46,5 +54,14 @@ public class TimelineStore
     {
         Meetings = value;
         ReInitialize();
+    }
+
+    private Meeting? InMeeting(LocalDateTime slotStartInclusive, LocalDateTime slotEndExclusive)
+    {
+        var slotStartInclusiveUtc = slotStartInclusive.InZoneLeniently(CurrentTimeZone.TimeZone).ToInstant();
+        var slotEndExclusiveUtc = slotEndExclusive.InZoneLeniently(CurrentTimeZone.TimeZone).ToInstant();
+
+        // Doing an overlapping check
+        return Meetings.FirstOrDefault(m => m.StartTimeInclusive < slotEndExclusiveUtc && m.EndTimeExclusive > slotStartInclusiveUtc);
     }
 }
