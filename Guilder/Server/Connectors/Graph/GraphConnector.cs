@@ -1,11 +1,7 @@
-using System.Reflection.Metadata.Ecma335;
-using Azure.Identity;
-using Guilder.Server.Authentication;
 using Guilder.Shared;
-using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using NodaTime;
+using Microsoft.Graph.Users.Item.Calendar.GetSchedule;
 
 using Room = Guilder.Shared.Room;
 
@@ -25,10 +21,7 @@ public class GraphConnector : IMeetingRoomConnector
         IReadOnlyList<Room> temp = await GetRoomsAsync();
         try
         {
-            string? userId = ((await GraphClient.Users.GetAsync((requestConfiguration) =>
-            {
-                requestConfiguration.QueryParameters.Filter = $"mail eq '{temp.First().Email}'";
-            }))?.Value?.First().Id) ?? throw new InvalidOperationException("");
+            string userId = await GetUserId(temp.First());
             //var result = await GraphClient.Users[userId.Value.First().Id].GetAsync((requestConfiguration) =>
             //{
             //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
@@ -44,6 +37,47 @@ public class GraphConnector : IMeetingRoomConnector
         {
         }
         return null!;
+    }
+
+    private async Task<string> GetUserId(Room room)
+    {
+        return ((await GraphClient.Users.GetAsync((requestConfiguration) =>
+        {
+            requestConfiguration.QueryParameters.Filter = $"mail eq '{room.Email}'";
+        }))?.Value?.First().Id) ?? throw new InvalidOperationException("User associated with room not found");
+    }
+
+    public async Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end)
+    {
+        Room? room = await GetRoom(roomId);
+
+        if (room is null) return Array.Empty<Meeting>();
+        const string dateTimeFormat = "yyyy-MM-ddTHH:mm:ss";
+        GetScheduleResponse? result = await GraphClient.Users[await GetUserId(room)].Calendar.GetSchedule.PostAsync(new GetSchedulePostRequestBody()
+        {
+            Schedules = new() { room.Email },
+            StartTime = new DateTimeTimeZone
+            {
+                DateTime = start.ToUniversalTime().ToString(dateTimeFormat),
+                TimeZone = "UTC"
+            },
+            EndTime = new DateTimeTimeZone
+            {
+                DateTime = end.ToUniversalTime().ToString(dateTimeFormat),
+                TimeZone = "UTC"
+            },
+            AvailabilityViewInterval = 15,
+        });
+        if (result?.Value is { } freeBusyResults)
+        {
+            return freeBusyResults.SelectMany(scheduleInformation => scheduleInformation.ScheduleItems ?? Enumerable.Empty<ScheduleItem>())
+                .Select(scheduleItem => new Meeting(scheduleItem.Subject ?? "Meeting",
+                                                    NodaTime.Instant.FromDateTimeOffset(scheduleItem.Start.ToDateTimeOffset()),
+                                                    NodaTime.Instant.FromDateTimeOffset(scheduleItem.End.ToDateTimeOffset()),
+                                                    scheduleItem.Status.ToString())).ToList();
+        }
+
+        return Array.Empty<Meeting>();
     }
 
     public async Task<IReadOnlyList<Room>> GetRoomsAsync()

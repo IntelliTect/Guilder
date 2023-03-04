@@ -13,6 +13,7 @@ namespace Guilder.Server.Connectors.Fake
         }
 
         public Task<Meeting> CreateMeetingAsync(Meeting meeting) => throw new NotImplementedException();
+        public Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, DateTimeOffset start, DateTimeOffset end) => throw new NotImplementedException();
 
         public Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
         {
@@ -34,7 +35,7 @@ namespace Guilder.Server.Connectors.Fake
         {
             return Task.FromResult((IReadOnlyList<Room>)new List<Room>()
             {
-                new ("1", "Conference Room")
+                new ("1", "Conference Room", "hi@intellitect.com")
 
             });
         }

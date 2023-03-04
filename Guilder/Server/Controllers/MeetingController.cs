@@ -1,4 +1,5 @@
-﻿using Guilder.Server.Connectors;
+﻿using System.ComponentModel;
+using Guilder.Server.Connectors;
 using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,10 @@ public class MeetingController
         RoomConnector = roomConnector;
     }
 
-    [HttpGet]
-    public async Task<IReadOnlyList<Meeting>> Get(string roomId)
+    [HttpGet("/{date}")]
+    public async Task<IReadOnlyList<Meeting>> Get([DefaultValue("f9f421b0-11dd-438e-89d0-1cfe1aac2467")] string roomId, DateOnly date)
     {
-        await RoomConnector.GetRoomsAsync();
-        return await RoomConnector.GetMeetingsAsync(roomId);
+        return await RoomConnector.GetFreeBusyAsync(roomId, date.ToDateTime(TimeOnly.MinValue), date.ToDateTime(TimeOnly.MaxValue));
     }
 
     [HttpPost]

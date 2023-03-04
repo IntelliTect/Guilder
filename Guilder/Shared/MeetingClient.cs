@@ -1,6 +1,6 @@
-﻿using NodaTime;
+﻿using System.Text.Json;
+using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using System.Text.Json;
 
 namespace Guilder.Shared
 {

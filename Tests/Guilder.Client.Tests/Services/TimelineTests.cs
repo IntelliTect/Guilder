@@ -1,11 +1,6 @@
 ﻿using Guilder.Client.Services;
 using Guilder.Shared;
 using NodaTime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Guilder.Client.Tests.Services;
 

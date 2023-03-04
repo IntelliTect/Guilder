@@ -1,6 +1,5 @@
 ﻿using Guilder.Client.Timeline;
 using Guilder.Shared;
-using Microsoft.AspNetCore.Components;
 using NodaTime;
 
 namespace Guilder.Client.Services;
