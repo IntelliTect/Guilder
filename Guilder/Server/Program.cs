@@ -1,5 +1,7 @@
 using Guilder.Server.Connectors;
+using Guilder.Server.Connectors.Fake;
 using Guilder.Server.Connectors.Graph;
+using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IMeetingRoomConnector, GraphConnector>();
+//builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
+
+builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 
 var app = builder.Build();
 
