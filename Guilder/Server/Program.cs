@@ -1,9 +1,15 @@
+using Azure.Core;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Graph;
+using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
+using Microsoft.Graph;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 
@@ -30,6 +36,27 @@ public class Program
         //builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
 
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
+
+        builder.Services.AddScoped<TokenCredential>(provider =>
+        {
+            IOptions<AzureAppOptions> option = provider.GetRequiredService<IOptions<AzureAppOptions>>();
+
+            return new ClientSecretCredential(
+                tenantId: option.Value.TenantId,
+                clientId: option.Value.ClientId,
+                clientSecret: option.Value.ClientSecret,
+                new TokenCredentialOptions
+                {
+                    AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+                }
+            );
+        });
+        builder.Services.AddScoped<GraphServiceClient>(provider =>
+        {
+            TokenCredential credential = provider.GetRequiredService<TokenCredential>();
+            var scopes = new[] { "https://graph.microsoft.com/.default" };
+            return new GraphServiceClient(credential, scopes);
+        });
 
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
