@@ -33,8 +33,9 @@ public class GraphConnector : IMeetingRoomConnector
             });
             var calResult = await GraphClient.Users[userId].Calendar.Events.GetAsync();
         }
-        catch (Exception ex)
+        catch (Exception )
         {
+            throw;
         }
         return null!;
     }
@@ -151,7 +152,7 @@ public class GraphConnector : IMeetingRoomConnector
 
 
         }
-        catch (Exception ex)
+        catch (Exception )
         {
             throw;
         }
