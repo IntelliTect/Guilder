@@ -2,5 +2,5 @@
 
 namespace Guilder.Client.Timeline
 {
-    record class TimelineSlot(LocalDateTime startInclusive, LocalDateTime endExclusive);
+    public record class TimelineSlot(LocalDateTime StartInclusive, LocalDateTime EndExclusive);
 }

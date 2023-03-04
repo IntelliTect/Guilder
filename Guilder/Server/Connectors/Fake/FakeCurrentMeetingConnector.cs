@@ -31,11 +31,12 @@ namespace Guilder.Server.Connectors.Fake
         }
 
         public Task<IReadOnlyList<Room>> GetRoomsAsync()
-
         {
+            return Task.FromResult((IReadOnlyList<Room>)new List<Room>()
+            {
+                new ("1", "Conference Room")
 
-            throw new NotImplementedException();
-
+            });
         }
     }
 }

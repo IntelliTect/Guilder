@@ -1,4 +1,5 @@
-﻿using Guilder.Shared;
+﻿using Guilder.Client.Timeline;
+using Guilder.Shared;
 using Microsoft.AspNetCore.Components;
 using NodaTime;
 
@@ -9,7 +10,9 @@ public class TimelineStore
     public LocalDateTime LowerBound { get; private set; }
     public LocalDateTime UpperBound { get; private set; }
 
-    private IEnumerable<Meeting> AllMeetings { get; set; } = new List<Meeting>();
+    public List<TimelineSlot> SlotsToDisplay { get; private set; } = new List<TimelineSlot>();
+
+    private IEnumerable<Meeting> Meetings { get; set; } = new List<Meeting>();
 
     public IClock Clock { get; }
     public ICurrentTimeZone CurrentTimeZone { get; }
@@ -27,11 +30,22 @@ public class TimelineStore
 
         LowerBound = currentSlotStartLocal.PlusMinutes(-30);
         UpperBound = currentSlotStartLocal.PlusMinutes(4 * 60);
+
+        var slotStart = LowerBound;
+
+        SlotsToDisplay.Clear();
+
+        while (slotStart < UpperBound)
+        {
+            SlotsToDisplay.Add(new TimelineSlot(slotStart, slotStart.PlusMinutes(30)));
+
+            slotStart = slotStart.PlusMinutes(30);
+        }
     }
 
     public void SetMeetings(IEnumerable<Meeting> value)
     {
-        AllMeetings = value;
+        Meetings = value;
         ReInitialize();
     }
 }

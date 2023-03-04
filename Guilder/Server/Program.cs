@@ -3,6 +3,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
+using Guilder.Server.Connectors.Fake;
 using Guilder.Server.Connectors.Graph;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
