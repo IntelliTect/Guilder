@@ -21,7 +21,7 @@ public class GraphConnector : IMeetingRoomConnector
         IReadOnlyList<Room> temp = await GetRoomsAsync();
         try
         {
-            string userId = await GetUserId(temp.First());
+            string userId = await GetUserId(temp.First(x => x.Id == "3a02a800-1e8a-49ef-82f6-be60e1147fdd"));
             //var result = await GraphClient.Users[userId.Value.First().Id].GetAsync((requestConfiguration) =>
             //{
             //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
@@ -31,7 +31,7 @@ public class GraphConnector : IMeetingRoomConnector
             {
                 requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
             });
-            //var calResult = await GraphClient.Users[result.Value.First().Id].Calendar.Events.GetAsync();
+            var calResult = await GraphClient.Users[userId].Calendar.Events.GetAsync();
         }
         catch (Exception ex)
         {
