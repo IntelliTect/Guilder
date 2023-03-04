@@ -1,4 +1,4 @@
-﻿@using Guilder.Client.Services;
+@using Guilder.Client.Services;
 @using Guilder.Shared;
 @inject TimelineStore TimelineStore
 
@@ -8,7 +8,7 @@
             <div class="scroller" style="min-width:@(100 * TimelineStore.SlotsToDisplay.Count)px">
                 @foreach (var slot in TimelineStore.SlotsToDisplay)
                 {
-                    <button class="slot-wrapper"></button>
+                    <button class="slot-wrapper" style="background-color:@(slot.PartOfMeeting is null ? "green" : "red")"></button>
                 }
             </div>
         </div>
