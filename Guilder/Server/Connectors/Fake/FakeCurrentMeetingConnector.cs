@@ -16,21 +16,32 @@ namespace Guilder.Server.Connectors.Fake
         {
             var currentSlotStart = GetSlotStart(_clock.GetCurrentInstant());
 
-            return Task.FromResult((IReadOnlyList<Meeting>)new List<Meeting>()
+            return Task.FromResult((IReadOnlyList<Meeting>)new List<Meeting>()
+
             {
                 new ("Meeting 1",
                     currentSlotStart,
                     currentSlotStart.Plus(Duration.FromMinutes(30)),
-                    "Talking about the app")
-            });
-        }
-
-        public Task<IReadOnlyList<Room>> GetRoomsAsync(string roomId)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Not supporting any time zones that are not offset by a multiple of 30 minutes
+                    "Talking about the app")
+
+            });
+
+        }
+
+
+
+        public Task<IReadOnlyList<Room>> GetRoomsAsync()
+
+        {
+
+            throw new NotImplementedException();
+
+        }
+
+
+
+        // Not supporting any time zones that are not offset by a multiple of 30 minutes
+
         private Instant GetSlotStart(Instant instant)
         {
             var dateTime = instant.InUtc().LocalDateTime;

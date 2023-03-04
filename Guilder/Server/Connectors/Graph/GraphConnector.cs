@@ -4,7 +4,8 @@ using Guilder.Shared;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using NodaTime;
+using NodaTime;
+
 using Room = Guilder.Shared.Room;
 
 namespace Guilder.Server.Connectors.Graph;
@@ -31,7 +32,7 @@ public class GraphConnector : IMeetingRoomConnector
         throw new NotImplementedException();
     }
 
-    public async Task<IReadOnlyList<Room>> GetRoomsAsync(string roomId)
+    public async Task<IReadOnlyList<Room>> GetRoomsAsync()
     {
         GraphServiceClient graphClient = Authentication();
 
@@ -63,11 +64,16 @@ public class GraphConnector : IMeetingRoomConnector
         var graphClient = new GraphServiceClient(credential, scopes);
         return graphClient;
     }
-    public Task<Meeting> CreateMeetingAsync(
+    public async Task<Meeting> CreateMeetingAsync(
         string roomId, Instant expectedStart, Instant expectedEnd, string? description = null)
+    {
+        // GraphServiceClient graphClient = Authentication();
+        // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
 
-    {
-        return Task.Run(() => new Meeting("1", expectedStart, expectedEnd, description));
+        //graphClient.Places.GraphRoom.
+        //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
+
+        return new Meeting("1", expectedStart, expectedEnd, description);
 
 
 

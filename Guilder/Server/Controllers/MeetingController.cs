@@ -18,7 +18,7 @@ public class MeetingController
     [HttpGet]
     public async Task<IReadOnlyList<Meeting>> Get(string roomId)
     {
-        await RoomConnector.GetRoomsAsync(roomId);
+        await RoomConnector.GetRoomsAsync();
         return await RoomConnector.GetMeetingsAsync(roomId);
     }
 }
