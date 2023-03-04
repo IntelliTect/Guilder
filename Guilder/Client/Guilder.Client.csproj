@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\MiracleMeet.Shared.csproj" />
+    <ProjectReference Include="..\Shared\Guilder.Shared.csproj" />
   </ItemGroup>
 
 </Project>

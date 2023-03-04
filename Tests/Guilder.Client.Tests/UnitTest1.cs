@@ -1,4 +1,4 @@
-namespace MiracleMeet.Client.Tests;
+namespace Guilder.Client.Tests;
 
 public class UnitTest1
 {

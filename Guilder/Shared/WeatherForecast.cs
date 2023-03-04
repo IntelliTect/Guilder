@@ -1,4 +1,4 @@
-namespace MiracleMeet.Shared
+namespace Guilder.Shared
 {
     public class WeatherForecast
     {

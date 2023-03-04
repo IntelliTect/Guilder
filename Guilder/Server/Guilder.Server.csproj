@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\MiracleMeet.Client.csproj" />
-    <ProjectReference Include="..\Shared\MiracleMeet.Shared.csproj" />
+    <ProjectReference Include="..\Client\Guilder.Client.csproj" />
+    <ProjectReference Include="..\Shared\Guilder.Shared.csproj" />
   </ItemGroup>
 
 

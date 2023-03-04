@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MiracleMeet.Shared;
+using Guilder.Shared;
 
-namespace MiracleMeet.Server.Controllers
+namespace Guilder.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
