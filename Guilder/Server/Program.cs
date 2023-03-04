@@ -31,7 +31,7 @@ public class Program
             });
         builder.Services.AddRazorPages();
 
-        builder.Services.AddSingleton<IMeetingRoomConnector, GraphConnector>();
+        builder.Services.AddScoped<IMeetingRoomConnector, GraphConnector>();
         //builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
 
         builder.Services.AddSingleton<IClock>(SystemClock.Instance);
