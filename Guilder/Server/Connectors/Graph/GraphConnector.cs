@@ -46,7 +46,6 @@ public class GraphConnector : IMeetingRoomConnector
 
     public async Task<Meeting> CreateMeetingAsync(Meeting meeting)
     {
-        GraphServiceClient graphClient = Authentication();
         // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
 
         //graphClient.Places.GraphRoom.
