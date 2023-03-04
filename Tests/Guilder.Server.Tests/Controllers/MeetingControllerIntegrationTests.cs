@@ -9,6 +9,8 @@ public class MeetingControllerIntegrationTests : IDisposable
     [Fact]
     public async Task CreateMeeting_NewMeeting_Success()
     {
+        Factory.Connector = "MicrosoftGraph";
+        
         MeetingClient client = new(Factory.CreateClient());
 
         Instant expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
