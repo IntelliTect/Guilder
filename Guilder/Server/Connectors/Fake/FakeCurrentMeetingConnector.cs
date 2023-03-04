@@ -19,14 +19,14 @@ namespace Guilder.Server.Connectors.Fake
             return Task.FromResult((IReadOnlyList<Meeting>)new List<Meeting>()
             {
                 new ("Meeting 1",
-                    "Talking about the app",
                     currentSlotStart,
-                    currentSlotStart.Plus(Duration.FromMinutes(30)))
+                    currentSlotStart.Plus(Duration.FromMinutes(30)),
+                    "Talking about the app")
             });
         }
 
         // Not supporting any time zones that are not offset by a multiple of 30 minutes
-        private Instant GetSlotStart(Instant instant)
+        private static Instant GetSlotStart(Instant instant)
         {
             var dateTime = instant.InUtc().LocalDateTime;
 

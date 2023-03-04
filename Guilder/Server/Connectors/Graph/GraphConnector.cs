@@ -4,21 +4,18 @@ using Guilder.Shared;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
+using NodaTime;
 
 namespace Guilder.Server.Connectors.Graph;
 
-public class GraphConnector : IMeetingRoomConnector
-{
+public class GraphConnector : IMeetingRoomConnector {
     public IOptions<AzureAppOptions> AppOptions { get; set; }
-    public GraphConnector(IOptions<AzureAppOptions> options)
-    {
+    public GraphConnector(IOptions<AzureAppOptions> options) {
         AppOptions = options;
     }
 
-    public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
-    {
-        var options = new TokenCredentialOptions
-        {
+    public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId) {
+        var options = new TokenCredentialOptions {
             AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
         };
         var credential = new ClientSecretCredential(
@@ -32,10 +29,18 @@ public class GraphConnector : IMeetingRoomConnector
 
 
         RoomCollectionResponse? rooms = await graphClient.Places.GraphRoom
-                .GetAsync(requestConfiguration =>
-                {
+                .GetAsync(requestConfiguration => {
                     requestConfiguration.QueryParameters.Top = 10;
                 });
         throw new NotImplementedException();
     }
+
+    public Task<Meeting> CreateMeetingAsync(
+        string roomId, Instant expectedStart, Instant expectedEnd, string? description = null) 
+    {
+        return Task.Run(() => new Meeting("1", expectedStart, expectedEnd, description));
+        
+    }
 }
+
+ 

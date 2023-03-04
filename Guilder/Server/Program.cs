@@ -42,8 +42,7 @@ try
             ExcludeInteractiveBrowserCredential = true,
             ExcludeSharedTokenCacheCredential = true,
             ExcludeEnvironmentCredential = true,
-            ExcludeVisualStudioCodeCredential = true,
-            ExcludeAzurePowerShellCredential = true
+            ExcludeVisualStudioCodeCredential = true
         }),
         new AzureKeyVaultConfigurationOptions()
         {
