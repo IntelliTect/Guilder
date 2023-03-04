@@ -4,14 +4,13 @@ using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Graph;
-using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
+
+namespace Guilder.Server;
 
 public class Program
 {
@@ -51,7 +50,7 @@ public class Program
                 }
             );
         });
-        builder.Services.AddScoped<GraphServiceClient>(provider =>
+        builder.Services.AddScoped(provider =>
         {
             TokenCredential credential = provider.GetRequiredService<TokenCredential>();
             var scopes = new[] { "https://graph.microsoft.com/.default" };
