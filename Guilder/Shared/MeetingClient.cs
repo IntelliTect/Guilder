@@ -16,7 +16,7 @@ namespace Guilder.Shared
         public async Task<IEnumerable<Meeting>> GetMeetingsForRoomId(string roomId)
         {
             var options = new JsonSerializerOptions(JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-            var response = await _http.GetFromJsonAsync<IEnumerable<Meeting>>($"room/{roomId}/meeting", options);
+            var response = await Http.GetFromJsonAsync<IEnumerable<Meeting>>($"room/{roomId}/meeting", options);
 
             return response ?? new List<Meeting>();
         }
