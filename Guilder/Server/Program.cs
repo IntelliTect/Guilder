@@ -5,11 +5,16 @@ using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Graph;
 using NodaTime.Serialization.SystemTextJson;
 using NodaTime;
+using Microsoft.Extensions.Logging.Console;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Logging
+    .AddConsole()
+    // Filter out Request Starting/Request Finished noise:
+    .AddFilter<ConsoleLoggerProvider>("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning);
 
+// Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
