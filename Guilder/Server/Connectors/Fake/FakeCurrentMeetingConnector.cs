@@ -1,6 +1,5 @@
-﻿using Guilder.Shared;
+using Guilder.Shared;
 using NodaTime;
-using System.Collections.Generic;
 
 namespace Guilder.Server.Connectors.Fake
 {
@@ -13,20 +12,26 @@ namespace Guilder.Server.Connectors.Fake
             _clock = clock;
         }
 
-        public Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId) {
+        public Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
+        {
             var currentSlotStart = GetSlotStart(_clock.GetCurrentInstant());
 
-            return Task.FromResult((IReadOnlyList<Meeting>)new List<Meeting>()
+            return Task.FromResult((IReadOnlyList<Meeting>)new List<Meeting>()
             {
                 new ("Meeting 1",
                     currentSlotStart,
                     currentSlotStart.Plus(Duration.FromMinutes(30)),
-                    "Talking about the app")
-            });
-        }
-
-        // Not supporting any time zones that are not offset by a multiple of 30 minutes
-        private static Instant GetSlotStart(Instant instant)
+                    "Talking about the app")
+            });
+        }
+
+        public Task<IReadOnlyList<Room>> GetRoomsAsync(string roomId)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Not supporting any time zones that are not offset by a multiple of 30 minutes
+        private Instant GetSlotStart(Instant instant)
         {
             var dateTime = instant.InUtc().LocalDateTime;
 

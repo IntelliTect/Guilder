@@ -1,8 +1,8 @@
+using Guilder.Client;
+using Guilder.Shared;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Guilder.Client;
 using NodaTime;
-using Guilder.Shared;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

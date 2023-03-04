@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Guilder.Shared;
 
 namespace Guilder.Server.Controllers;
 

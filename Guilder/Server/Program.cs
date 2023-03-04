@@ -3,9 +3,9 @@ using Azure.Identity;
 using Guilder.Server.Authentication;
 using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Graph;
-using NodaTime.Serialization.SystemTextJson;
-using NodaTime;
 using Microsoft.Extensions.Logging.Console;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
 
 var builder = WebApplication.CreateBuilder(args);
 

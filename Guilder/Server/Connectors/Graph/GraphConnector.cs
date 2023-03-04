@@ -4,18 +4,53 @@ using Guilder.Shared;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using NodaTime;
+using NodaTime;
+using Room = Guilder.Shared.Room;
 
 namespace Guilder.Server.Connectors.Graph;
 
-public class GraphConnector : IMeetingRoomConnector {
+public class GraphConnector : IMeetingRoomConnector
+{
     public IOptions<AzureAppOptions> AppOptions { get; set; }
-    public GraphConnector(IOptions<AzureAppOptions> options) {
+    public GraphConnector(IOptions<AzureAppOptions> options)
+    {
         AppOptions = options;
     }
 
-    public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId) {
-        var options = new TokenCredentialOptions {
+    public async Task<IReadOnlyList<Meeting>> GetMeetingsAsync(string roomId)
+    {
+        GraphServiceClient graphClient = Authentication();
+
+
+        //EventCollectionResponse? response = await graphClient.Users.GetByIds.PostAsync.GetAsync((requestConfiguration) =>
+        //{
+        //    requestConfiguration.QueryParameters.Select = new string[] { "subject", "organizer", "attendees", "start", "end", "location" };
+        //    requestConfiguration.Headers.Add("Prefer", "outlook.timezone=\"Pacific Standard Time\"");
+        //});
+
+        throw new NotImplementedException();
+    }
+
+    public async Task<IReadOnlyList<Room>> GetRoomsAsync(string roomId)
+    {
+        GraphServiceClient graphClient = Authentication();
+
+        RoomCollectionResponse? response = await graphClient.Places.GraphRoom
+                .GetAsync(requestConfiguration =>
+                {
+                    requestConfiguration.QueryParameters.Top = 10;
+                });
+        if (response?.Value is { } roomsResponse)
+        {
+            return roomsResponse.Where(room => room.Id is not null).Select(room => new Room(room.Id!, room.Nickname ?? room.DisplayName ?? $"Default Room {room.Id}")).ToList();
+        }
+        return Array.Empty<Room>();
+    }
+
+    private GraphServiceClient Authentication()
+    {
+        var options = new TokenCredentialOptions
+        {
             AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
         };
         var credential = new ClientSecretCredential(
@@ -26,21 +61,17 @@ public class GraphConnector : IMeetingRoomConnector {
         );
         var scopes = new[] { "https://graph.microsoft.com/.default" };
         var graphClient = new GraphServiceClient(credential, scopes);
-
-
-        RoomCollectionResponse? rooms = await graphClient.Places.GraphRoom
-                .GetAsync(requestConfiguration => {
-                    requestConfiguration.QueryParameters.Top = 10;
-                });
-        throw new NotImplementedException();
+        return graphClient;
     }
+    public Task<Meeting> CreateMeetingAsync(
+        string roomId, Instant expectedStart, Instant expectedEnd, string? description = null)
 
-    public Task<Meeting> CreateMeetingAsync(
-        string roomId, Instant expectedStart, Instant expectedEnd, string? description = null) 
-    {
+    {
         return Task.Run(() => new Meeting("1", expectedStart, expectedEnd, description));
-        
+
+
+
     }
 }
 
- 
+

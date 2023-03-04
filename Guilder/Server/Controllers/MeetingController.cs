@@ -15,10 +15,10 @@ public class MeetingController
         RoomConnector = roomConnector;
     }
 
-
     [HttpGet]
-    public Task<IReadOnlyList<Meeting>> Get(string roomId)
+    public async Task<IReadOnlyList<Meeting>> Get(string roomId)
     {
-        return RoomConnector.GetMeetingsAsync(roomId);
+        await RoomConnector.GetRoomsAsync(roomId);
+        return await RoomConnector.GetMeetingsAsync(roomId);
     }
 }
