@@ -10,11 +10,11 @@
 }
 
 .free {
-    background-color: #A5FF7F
+    background-color: green
 }
 
 .busy {
-    background-color: #FF7F7F
+    background-color: red
 }
 
 .scroller {
