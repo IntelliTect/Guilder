@@ -11,7 +11,7 @@
 
 
 @code {
-    private Room _room = new Room("1", "Conference Room", "hi@intellitect.com");
+    private Room _room = new Room("3a02a800-1e8a-49ef-82f6-be60e1147fdd", "HumperdinksCastle", "hi@intellitect.com");
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
@@ -19,7 +19,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _meetings = await MeetingClient.GetMeetingsForRoomId("1");
+        _meetings = await MeetingClient.GetFreeBusyForRoomId("3a02a800-1e8a-49ef-82f6-be60e1147fdd", new DateOnly(2023, 03, 03));
 
         var now = Clock.GetCurrentInstant();
         Console.WriteLine($"Now is {now}");

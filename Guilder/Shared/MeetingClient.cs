@@ -18,7 +18,17 @@ namespace Guilder.Shared
             var options = new JsonSerializerOptions(
                 JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
             var response = await Http.GetFromJsonAsync<IEnumerable<Meeting>>(
-                $"room/{roomId}/meeting", options);
+                $"room/{roomId}/Meetings", options);
+
+            return response ?? new List<Meeting>();
+        }
+
+        public async Task<IEnumerable<Meeting>> GetFreeBusyForRoomId(string roomId, DateOnly date)
+        {
+            var options = new JsonSerializerOptions(
+                JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            var response = await Http.GetFromJsonAsync<IEnumerable<Meeting>>(
+                $"room/{roomId}/Meetings/FreeBusy/{date}", options);
 
             return response ?? new List<Meeting>();
         }
