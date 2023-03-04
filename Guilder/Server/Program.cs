@@ -24,7 +24,6 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IMeetingRoomConnector, GraphConnector>();
 //builder.Services.AddSingleton<IMeetingRoomConnector, FakeCurrentMeetingConnector>();
-builder.Services.AddOptions<AzureAppOptions>(AzureAppOptions.SectionName);
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 
@@ -48,7 +47,7 @@ try
         }),
         new AzureKeyVaultConfigurationOptions()
         {
-            ReloadInterval = TimeSpan.FromMinutes(10) // Note that this doesn't work for the AzureAz:ClientSecret since it is set once at startup.
+            ReloadInterval = TimeSpan.FromMinutes(10)
         }
     );
 }
@@ -58,10 +57,11 @@ catch (Azure.RequestFailedException ex)
     // If this is development, give a decent error message if they don't have the secret stored locally.
     if (builder.Environment.IsDevelopment())
     {
-        if (string.IsNullOrWhiteSpace(builder.Configuration["AzureAppOptions:ClientSecret"]))
+        const string configKey = $"{AzureAppOptions.SectionName}:{nameof(AzureAppOptions.ClientSecret)}";
+        if (string.IsNullOrWhiteSpace(builder.Configuration[configKey]))
         {
             throw new InvalidOperationException(
-                "AzureAppOptions:ClientSecret is not set. This app is configured to use a KeyVault. Please configure using https://intellitect.com/blog/key-vault-configuration-provider/. A local secrets.json file can be used as well.",
+                $"{configKey} is not set. This app is configured to use a KeyVault. Please configure using https://intellitect.com/blog/key-vault-configuration-provider/. A local secrets.json file can be used as well.",
                 ex
             );
         }
@@ -72,6 +72,10 @@ catch (Azure.RequestFailedException ex)
         throw new InvalidOperationException("The Azure KeyVault is not accessible", ex);
     }
 }
+
+builder.Services.AddOptions<AzureAppOptions>()
+    .Bind(builder.Configuration.GetSection(AzureAppOptions.SectionName))
+    .ValidateDataAnnotations();
 
 builder.Services.AddSwaggerGen();
 
