@@ -1,14 +1,17 @@
 ﻿@using Guilder.Shared;
+@using System.Globalization;
 
 <div class="card">
     @if (Meeting != null)
     {
-        <h3>@Meeting.Name</h3>
-        <p>@Meeting.Description</p>
+        <h1 style="font-size: 6vh"><span class="red-color">@Meeting.Name</span></h1>
+        <p style="font-size: 2vh">Meeting Details:</p>
+        <p style="font-size: 3vh">@Meeting.StartTimeInclusive.ToString("HH:mm", CultureInfo.InvariantCulture) - @Meeting.EndTimeExclusive.ToString("HH:mm", CultureInfo.InvariantCulture)</p>
+        <p style="font-size: 3vh">@Meeting.Description</p>
     }
     else
     {
-        <h3>No Current Meeting Selected</h3>
+        <h1><span class="green-color">Meeting Room Is Currently Free</span></h1>
     }
 
 </div>
