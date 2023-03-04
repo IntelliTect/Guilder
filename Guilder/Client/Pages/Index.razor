@@ -1,9 +1,29 @@
 ﻿@page "/"
+@using Guilder.Shared;
+@using NodaTime;
+@inject MeetingClient MeetingClient
+@inject IClock Clock
 
-<PageTitle>Index</PageTitle>
+<PageTitle>@_room.Name</PageTitle>
 
-<h1>Hello, world!</h1>
+<CurrentMeeting Meeting="_currentMeeting"></CurrentMeeting>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private Room _room = new Room("1", "Conference Room");
+
+    private IEnumerable<Meeting> _meetings = new List<Meeting>();
+
+    private Meeting? _currentMeeting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _meetings = await MeetingClient.GetMeetingsForRoomId("1");
+
+        var now = Clock.GetCurrentInstant();
+        Console.WriteLine($"Now is {now}");
+        Console.WriteLine($"First meeting {_meetings.FirstOrDefault()?.StartTimeInclusive} to {_meetings.FirstOrDefault()?.EndTimeExclusive}");
+
+        _currentMeeting = _meetings.FirstOrDefault(x => x.StartTimeInclusive <= now && x.EndTimeExclusive > now);
+    }
+}

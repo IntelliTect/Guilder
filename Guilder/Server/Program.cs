@@ -1,13 +1,18 @@
 using Guilder.Server.Connectors;
 using Guilder.Server.Connectors.Fake;
 using Guilder.Server.Connectors.Graph;
+using NodaTime.Serialization.SystemTextJson;
 using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+    });
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IMeetingRoomConnector, GraphConnector>();

@@ -1,0 +1,18 @@
+﻿@using Guilder.Shared;
+<div class="">
+    @if (Meeting != null)
+    {
+        <h3>@Meeting.Name</h3>
+        <p>@Meeting.Description</p>
+    }
+    else
+    {
+        <h3>No Current Meeting</h3>
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public Meeting? Meeting { get; set; }
+}
