@@ -1,7 +1,6 @@
 ﻿using Guilder.Server.Connectors;
 using Guilder.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph.Education.Classes.Item.Assignments.Item.Submissions.Item.Return;
 
 namespace Guilder.Server.Controllers;
 

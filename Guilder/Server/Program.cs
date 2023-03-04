@@ -22,7 +22,7 @@ public class Program
         builder.Logging
             .AddConsole()
             // Filter out Request Starting/Request Finished noise:
-            .AddFilter<ConsoleLoggerProvider>("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning);
+            /*.AddFilter<ConsoleLoggerProvider>("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning)*/;
 
         // Add services to the container.
         builder.Services.AddControllersWithViews()
@@ -54,7 +54,7 @@ public class Program
         builder.Services.AddScoped(provider =>
         {
             TokenCredential credential = provider.GetRequiredService<TokenCredential>();
-            var scopes = new[] { "https://graph.microsoft.com/.default" };
+            string[] scopes = new[] { "https://graph.microsoft.com/.default" };
             return new GraphServiceClient(credential, scopes);
         });
 
