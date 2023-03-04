@@ -9,13 +9,21 @@
     float: left;
 }
 
+.free {
+    background-color: #A5FF7F
+}
+
+.busy {
+    background-color: #FF7F7F
+}
+
 .scroller {
     height: inherit;
     overflow-x: visible;
 }
 
 .timeline-wrapper {
-    height:10vh;
+    height: 10vh;
     width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -23,12 +31,10 @@
 
 ::-webkit-scrollbar {
     /* width: 0px; */
-    background: transparent; 
+    background: transparent;
 }
 
 .float-bottom {
     bottom: 25%;
     /* position: absolute; */
 }
-
-
