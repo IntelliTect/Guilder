@@ -4,16 +4,16 @@
 
 <div class="card">
     <div class="timeline-wrapper">
-        @foreach(var slot in TimelineStore.SlotsToDisplay)
+        @foreach (var slot in TimelineStore.SlotsToDisplay)
         {
-            <div class="slot-wrapper" style="width:@(100 / TimelineStore.SlotsToDisplay.Count)%"></div>
+            <div class="slot-wrapper" style="width:@(100.0 / TimelineStore.SlotsToDisplay.Count)%"></div>
         }
     </div>
 </div>
 
 @code {
     [Parameter]
-    public IEnumerable<Meeting> Meetings 
+    public IEnumerable<Meeting> Meetings
     {
         get => TimelineStore.Meetings;
         set => TimelineStore.SetMeetings(value);
