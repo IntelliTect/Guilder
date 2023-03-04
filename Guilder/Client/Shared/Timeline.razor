@@ -1,13 +1,19 @@
-﻿@using Guilder.Client.Services;
+@using Guilder.Client.Services;
 @using Guilder.Shared;
 @inject TimelineStore TimelineStore
 
-<div class="card">
-    <div class="timeline-wrapper">
-        @foreach (var slot in TimelineStore.SlotsToDisplay)
-        {
-            <div class="slot-wrapper" style="width:@(100.0 / TimelineStore.SlotsToDisplay.Count)%"></div>
-        }
+<div class="container">
+    <div class="row">
+        <div class="position-relative">
+            <div class="row timeline-wrapper">
+                <div class="scroller" style="min-width:@(100 * TimelineStore.SlotsToDisplay.Count)px">
+                    @foreach (var slot in TimelineStore.SlotsToDisplay)
+                    {
+                        <button class="slot-wrapper"></button>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
