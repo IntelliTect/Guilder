@@ -13,10 +13,6 @@ public class MeetingControllerIntegrationTests : IDisposable
     private JsonSerializerOptions Options { get; } = new JsonSerializerOptions(
         JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
-    public MeetingControllerIntegrationTests()
-    {
-    }
-
     [Fact]
     public async Task CreateMeeting_NewMeeting_Success()
     {
@@ -24,8 +20,8 @@ public class MeetingControllerIntegrationTests : IDisposable
 
 
         string roomId = "1";
-        var expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
-        var expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
+        Instant expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
+        Instant expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
         Meeting expected = new("1", expectedStart, expectedEnd);
         HttpResponseMessage result = await client.PostAsJsonAsync(
             $"room/{roomId}/meeting", expected, Options);

@@ -6,18 +6,18 @@ namespace Guilder.Shared
 {
     public class MeetingClient
     {
-        private readonly HttpClient _http;
+        private HttpClient Http { get; }
 
-        public MeetingClient(HttpClient Http)
+        public MeetingClient(HttpClient http)
         {
-            _http = Http;
+            Http = http;
         }
 
         public async Task<IEnumerable<Meeting>> GetMeetingsForRoomId(string roomId)
         {
             var options = new JsonSerializerOptions(
                 JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-            var response = await _http.GetFromJsonAsync<IEnumerable<Meeting>>(
+            var response = await Http.GetFromJsonAsync<IEnumerable<Meeting>>(
                 $"room/{roomId}/meeting", options);
 
             return response ?? new List<Meeting>();
