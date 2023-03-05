@@ -1,4 +1,5 @@
 @using Guilder.Client.Services;
+@using Guilder.Client.Timeline;
 @using Guilder.Shared;
 @inject TimelineStore TimelineStore
 
@@ -6,13 +7,14 @@
     <div class="position-relative">
         <div class="row timeline-wrapper">
             <div class="scroller" style="min-width:@(100 * TimelineStore.SlotsToDisplay.Count)px">
-                @foreach (var slot in TimelineStore.SlotsToDisplay)
+                @for(int i = 0; i < TimelineStore.SlotsToDisplay.Count; i++)
                 {
-                    <button class="slot-wrapper @(slot.PartOfMeeting is null ? "free" : "busy")" @onclick="(async () => {
-                        TimelineStore.CurrentMeeting = slot.PartOfMeeting;
-                        await EventCallbackParam.InvokeAsync();
-                        })">@(slot.StartInclusive.TimeOfDay) </button>
-
+                    var item = TimelineStore.SlotsToDisplay[i];
+                    <button class="slot-wrapper @(item.PartOfMeeting is null ? "free" : "busy")" @onclick="(async () => {
+                        await UpdateCurrentMeeting(item);
+                        })">
+                        @ShowValue(i)
+                    </button>
                 }
             </div>
         </div>
@@ -29,4 +31,27 @@
 
     [Parameter]
     public EventCallback EventCallbackParam { get;set; }
+
+    public string ShowValue(int index)
+    {
+        if (index == 0)
+        {
+            return TimelineStore.SlotsToDisplay[index].StartInclusive.TimeOfDay.ToString("hh:mm tt", null);
+        }
+        if (index < TimelineStore.SlotsToDisplay.Count)
+        {
+            if (TimelineStore.SlotsToDisplay[index - 1].PartOfMeeting is not null && TimelineStore.SlotsToDisplay[index + 1].PartOfMeeting is not null)
+            {
+                return "----";
+            }
+        }
+
+        return TimelineStore.SlotsToDisplay[index].StartInclusive.TimeOfDay.ToString("hh:mm tt", null);
+    }
+
+    public async Task UpdateCurrentMeeting(TimelineSlot item)
+    {
+        TimelineStore.CurrentMeeting = item.PartOfMeeting;
+        await EventCallbackParam.InvokeAsync();
+    }
 }

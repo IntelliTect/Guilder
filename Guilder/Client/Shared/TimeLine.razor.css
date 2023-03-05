@@ -1,12 +1,9 @@
 .slot-wrapper {
-    border-left: 5px solid white;
     height: 100%;
     transform: translate3d(0, 0, 0);
     width: 100px;
-    /* background-color: green; */
     transition: width 0.5s ease;
     display: block;
-    float: left;
 }
 
 .free {
@@ -14,12 +11,15 @@
 }
 
 .busy {
-    background-color: red
+    background-color: red;
+    border-left: 0px;
+    border-right: 0px;
 }
 
 .scroller {
     height: inherit;
     overflow-x: visible;
+    display: flex;
 }
 
 .timeline-wrapper {
