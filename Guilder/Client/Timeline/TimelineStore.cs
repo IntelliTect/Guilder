@@ -10,7 +10,6 @@ public class TimelineStore
     public List<TimelineSlot> SlotsToDisplay { get; private set; } = new List<TimelineSlot>();
 
     public IEnumerable<Meeting> Meetings { get; set; } = new List<Meeting>();
-    public Meeting? CurrentMeeting { get; set; }
 
     public IClock Clock { get; }
     public ICurrentTimeZone CurrentTimeZone { get; }
@@ -43,7 +42,7 @@ public class TimelineStore
 
             if (meeting is not null)
             {
-                Console.WriteLine($"Meeting {meeting.Name} placed in {slotStart} - {slotEnd} slot");
+                //Console.WriteLine($"Meeting {meeting.Name} placed in {slotStart} - {slotEnd} slot");
             }
 
             SlotsToDisplay.Add(new TimelineSlot(slotStart, slotEnd, meeting));

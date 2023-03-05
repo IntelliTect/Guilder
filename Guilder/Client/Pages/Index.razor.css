@@ -1,0 +1,68 @@
+﻿.body {
+    height: 2vh;
+    background: linear-gradient(to top, transparent, black);
+}
+
+.clock-wrapper {
+    position: relative;
+}
+
+.clock {
+    height: 10vh;
+    color: white;
+    font-size: 5vh;
+    font-family: sans-serif;
+    line-height: 10vh;
+    display: flex;
+    overflow: hidden;
+    float: right;
+    bottom: 0px;
+    z-index: 5;
+    position: absolute;
+    top: 50vh;
+    right: 0;
+}
+
+    .clock::before, .clock::after {
+        content: '';
+        width: 10ch;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .clock::after {
+        bottom: 0;
+    }
+
+    .clock > div {
+        display: flex;
+    }
+
+.tick {
+    line-height: 10vh;
+}
+
+.tick-hidden {
+    opacity: 0;
+}
+
+.move {
+    animation: move linear 1s infinite;
+}
+
+@keyframes move {
+    from {
+        transform: translateY(0vh);
+    }
+
+    to {
+        transform: translateY(-20vh);
+    }
+}
+
+.room-change {
+    top: 50vh;
+    position: relative;
+    float:left;
+    z-index: 3;
+}

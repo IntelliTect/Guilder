@@ -66,3 +66,14 @@
         overflow-y: auto;
     }
 }
+
+.green-color {
+    background-color: #A5FF7F;
+    height: 100%;
+    width: 100%;
+}
+
+.red-color {
+    background-color: #FF7F7F;
+    height: 100%;
+}

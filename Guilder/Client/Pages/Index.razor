@@ -9,18 +9,90 @@
 @inject NavigationManager Navigation
 @inject TimelineStore TimelineStore
 
-<PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
+<PageTitle>@(_room?.Name ?? "Loading Room") - Guilder Availability</PageTitle>
+    <CurrentMeeting Meeting="SelectedMeeting" RoomName="@(_room?.Name ?? "Loading Room")"></CurrentMeeting>
+    <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
+    <div class="room-change">
+        <InputText DisplayName="RoomId Input" @bind-Value="roomId"></InputText>
+        <button @onclick="UpdateUriQuery">Update Room</button>
+    </div>
+    <div class="clock-wrapper">
+        <div class="clock">
+            <div>
+                <div>
+                    <div>@hour_First</div>
+                </div>
+                <div>
+                    <div>@hour_Second</div>
+                </div>
+            </div>
+            <div>:</div>
+            <div>
+                <div>
+                    <div>@minute_First</div>
+                </div>
+                <div>
+                    <div>@minute_Second</div>
+                </div>
+            </div>
+            <div>:</div>
+            <div>
+                <div>
+                    <div>@second_First</div>
+                </div>
+                <div class="infinite">
+                    <div>@second_Second</div>
+                </div>
+            </div>
+            <div>@meridiem</div>
+        </div>
+    </div>
 
-    <CurrentMeeting Meeting="TimelineStore.CurrentMeeting"></CurrentMeeting>
-    <Timeline Meetings="_meetings" EventCallbackParam="(() => StateHasChanged())"></Timeline>
-
-    @code {
+@code {
     private Room? _room;
+    private Meeting? CurrentMeeting { get; set; }
+    private Meeting? SelectedMeeting { get; set; }
+    private string? roomId { get; set; }
+
+    string hour_First;
+    string hour_Second;
+    string minute_First;
+    string minute_Second;
+    string second_First;
+    string second_Second;
+    string meridiem;
+    Timer aTimer;
+
+    protected override void OnInitialized()
+    {
+        aTimer = new Timer(Tick, null, 0, 1000);
+    }
+
+    private void Tick(object _)
+    {
+        DateTime currentTime = DateTime.Now;
+        string theTime = currentTime.ToString("HH:mm:ss");
+        hour_First = theTime[0].ToString();
+        hour_Second = theTime[1].ToString();
+        minute_First = theTime[3].ToString();
+        minute_Second = theTime[4].ToString();
+        second_First = theTime[6].ToString();
+        second_Second = theTime[7].ToString();
+        meridiem = currentTime.ToString("tt");
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateUriQuery()
+    {
+        Navigation.NavigateTo(Navigation.GetUriWithQueryParameter(nameof(roomId), roomId), true);
+    }
 
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
-    private Timer? RefreshTimer { get; set; }
+    private Timer? MeetingsRefreshTimer { get; set; }
+    private Timer? SelectedMeetingResetTimer { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,13 +104,31 @@
 
         await Refresh();
 
-        RefreshTimer = new Timer(TimerRefresh,
+        MeetingsRefreshTimer = new Timer(TimerRefresh,
             null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        SelectedMeetingResetTimer = new Timer(ResetCurrentMeeting,
+            null, TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
     }
 
     private async void TimerRefresh(object? state)
     {
         await InvokeAsync(() => Refresh());
+    }
+
+    private void SelectNewMeeting(Meeting? newMeeting)
+    {
+        SelectedMeeting = newMeeting;
+        SelectedMeetingResetTimer?.Change(TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
+    }
+
+    private async void ResetCurrentMeeting(object? state)
+    {
+        Console.WriteLine($"Resetting selected meeting to current: {CurrentMeeting?.Name}");
+        await InvokeAsync(() =>
+        {
+            SelectedMeeting = CurrentMeeting;
+            StateHasChanged();
+        });
     }
 
     private async Task Refresh()
@@ -58,10 +148,15 @@
         var now = Clock.GetCurrentInstant();
         Console.WriteLine($"Now is {now}");
         Console.WriteLine($"First meeting {_meetings.FirstOrDefault()?.StartTimeInclusive} to {_meetings.FirstOrDefault()?.EndTimeExclusive}");
+
+        CurrentMeeting = _meetings.FirstOrDefault(x => x.StartTimeInclusive <= now && x.EndTimeExclusive > now);
+        SelectedMeeting = CurrentMeeting;
     }
 
     void IDisposable.Dispose()
     {
-        RefreshTimer?.Dispose();
+        MeetingsRefreshTimer?.Dispose();
+        SelectedMeetingResetTimer?.Dispose();
+        aTimer?.Dispose();
     }
 }

@@ -110,12 +110,12 @@ public class GraphConnector : IMeetingRoomConnector
             //graphClient.Places.GraphRoom.
             //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
 
-            OnlineMeeting requestBody = new OnlineMeeting
-            {
-                StartDateTime = meeting.StartTimeInclusive.ToDateTimeOffset(),
-                EndDateTime = meeting.EndTimeExclusive.ToDateTimeOffset(),
-                Subject = meeting.Name
-            };
+            //OnlineMeeting requestBody = new OnlineMeeting
+            //{
+            //    StartDateTime = meeting.StartTimeInclusive.ToDateTimeOffset(),
+            //    EndDateTime = meeting.EndTimeExclusive.ToDateTimeOffset(),
+            //    Subject = meeting.Name
+            //};
 
             Event appointment = new Event();
             appointment.Subject = meeting.Name;
@@ -131,10 +131,8 @@ public class GraphConnector : IMeetingRoomConnector
             //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual"); 
             //    requestConfiguration.QueryParameters.Expand = new[] { "calendar" }; 
             //}); 
-            Calendar? calendar = await GraphClient.Users[userId].Calendar.GetAsync((requestConfiguration) =>
-            {
-                requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
-            });
+            Event? result = await GraphClient.Users[userId].Calendar.Events.PostAsync(appointment);
+
             //var calResult = await GraphClient.Users[result.Value.First().Id].Calendar.Events.GetAsync(); 
 
             //Task<OnlineMeetingCollectionResponse?> user =
@@ -142,13 +140,13 @@ public class GraphConnector : IMeetingRoomConnector
             //{
             //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
             //});
-            //int beforeCount = calendar.Events.Count;
-            //calendar.Events.Add(appointment);
-            //int afterCount = calendar.Events.Count;
+
 
 
             //var result = await me.OnlineMeetings.PostAsync(requestBody);
-            return meeting;
+            return new Meeting(result.Subject,
+                Instant.FromDateTimeUtc( result.Start.ToDateTime().ToUniversalTime()),
+                Instant.FromDateTimeUtc(result.End.ToDateTime().ToUniversalTime()));
 
 
         }

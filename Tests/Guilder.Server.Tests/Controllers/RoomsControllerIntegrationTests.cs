@@ -1,7 +1,3 @@
-using Guilder.Shared;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-
 namespace Guilder.Server.Tests.Controllers;
 
 

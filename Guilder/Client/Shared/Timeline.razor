@@ -30,7 +30,7 @@
     }
 
     [Parameter]
-    public EventCallback EventCallbackParam { get;set; }
+    public EventCallback<Meeting?> MeetingSelected { get;set; }
 
     public string ShowValue(int index)
     {
@@ -52,6 +52,6 @@
     public async Task UpdateCurrentMeeting(TimelineSlot item)
     {
         TimelineStore.CurrentMeeting = item.PartOfMeeting;
-        await EventCallbackParam.InvokeAsync();
+        await MeetingSelected.InvokeAsync();
     }
 }
