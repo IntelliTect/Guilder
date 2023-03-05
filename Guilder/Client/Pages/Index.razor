@@ -9,7 +9,7 @@
 @inject NavigationManager Navigation
 @inject TimelineStore TimelineStore
 
-<PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
+<PageTitle>@(_room?.Name ?? "Loading Room") - Guilder Availability</PageTitle>
     <CurrentMeeting Meeting="SelectedMeeting" RoomName="@(_room?.Name ?? "Loading Room")"></CurrentMeeting>
     <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
     <div class="room-change">
