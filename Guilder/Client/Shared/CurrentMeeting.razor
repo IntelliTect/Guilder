@@ -9,7 +9,7 @@
     {
         <h1 style="font-size: 6vh"><span class="red-color">@Meeting.Name</span></h1>
         <p style="font-size: 2vh">Meeting Details:</p>
-        <p style="font-size: 3vh">@Meeting.StartTimeInclusive.ToString("HH:mm", CultureInfo.InvariantCulture) - @Meeting.EndTimeExclusive.ToString("HH:mm", CultureInfo.InvariantCulture)</p>
+        <p style="font-size: 3vh">@Meeting.StartTimeInclusive.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).ToString("HH:mm", CultureInfo.InvariantCulture) - @Meeting.EndTimeExclusive.InZone(DateTimeZoneProviders.Tzdb.GetSystemDefault()).ToString("HH:mm", CultureInfo.InvariantCulture)</p>
         <p style="font-size: 3vh">@Meeting.Description</p>
     }
     else

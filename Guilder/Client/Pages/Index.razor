@@ -13,7 +13,7 @@
     <CurrentMeeting Meeting="SelectedMeeting" RoomName="@(_room?.Name ?? "Loading Room")"></CurrentMeeting>
     <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
     <div class="room-change">
-        <InputText DisplayName="RoomId Input" @bind-Value="roomId">Room Id</InputText>
+        <InputText DisplayName="RoomId Input" @bind-Value="roomId"></InputText>
         <button @onclick="UpdateUriQuery">Update Room</button>
     </div>
     <div class="clock-wrapper">
