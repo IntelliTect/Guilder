@@ -51,7 +51,6 @@
 
     public async Task UpdateCurrentMeeting(TimelineSlot item)
     {
-        TimelineStore.CurrentMeeting = item.PartOfMeeting;
         await MeetingSelected.InvokeAsync();
     }
 }
