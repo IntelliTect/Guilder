@@ -46,7 +46,9 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
     {
         return Task.FromResult((IReadOnlyList<Room>)new List<Room>()
         {
-            new ("1", "Conference Room", "hi@intellitect.com")
+            new ("1", "Conference Room", "hi@intellitect.com"),
+            new ("2", "Other Room", "hi@intellitect.com"),
+            new ("3", "Yup Room", "hi@intellitect.com")
 
         });
     }
