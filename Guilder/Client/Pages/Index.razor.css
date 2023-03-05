@@ -59,3 +59,10 @@
         transform: translateY(-20vh);
     }
 }
+
+.room-change {
+    top: 50vh;
+    position: relative;
+    float:left;
+    z-index: 3;
+}

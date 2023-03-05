@@ -10,9 +10,12 @@
 @inject TimelineStore TimelineStore
 
 <PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
-
     <CurrentMeeting Meeting="SelectedMeeting" RoomName="@(_room?.Name ?? "Loading Room")"></CurrentMeeting>
     <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
+    <div class="room-change">
+        <InputText DisplayName="RoomId Input" @bind-Value="roomId">Room Id</InputText>
+        <button @onclick="UpdateUriQuery">Update Room</button>
+    </div>
     <div class="clock-wrapper">
         <div class="clock">
             <div>
@@ -49,6 +52,7 @@
     private Room? _room;
     private Meeting? CurrentMeeting { get; set; }
     private Meeting? SelectedMeeting { get; set; }
+    private string? roomId { get; set; }
 
     string hour_First;
     string hour_Second;
@@ -79,10 +83,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    public void Dispose()
+    private void UpdateUriQuery()
     {
-        aTimer?.Dispose();
+        Navigation.NavigateTo(Navigation.GetUriWithQueryParameter(nameof(roomId), roomId));
     }
+
 
     private IEnumerable<Meeting> _meetings = new List<Meeting>();
 
@@ -152,5 +157,6 @@
     {
         MeetingsRefreshTimer?.Dispose();
         SelectedMeetingResetTimer?.Dispose();
+        aTimer?.Dispose();
     }
 }
