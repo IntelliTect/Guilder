@@ -11,7 +11,7 @@
 
 <PageTitle>@(_room?.Name ?? "Loading Room")</PageTitle>
 
-    <CurrentMeeting Meeting="SelectedMeeting"></CurrentMeeting>
+    <CurrentMeeting Meeting="SelectedMeeting" RoomName="@(_room?.Name ?? "Loading Room")"></CurrentMeeting>
     <Timeline Meetings="_meetings" MeetingSelected="((selectedMeeting) => SelectNewMeeting(selectedMeeting))"></Timeline>
     <div class="clock-wrapper">
         <div class="clock">
@@ -102,7 +102,7 @@
         MeetingsRefreshTimer = new Timer(TimerRefresh,
             null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
         SelectedMeetingResetTimer = new Timer(ResetCurrentMeeting,
-            null,TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
+            null, TimeSpan.FromMinutes(1), TimeSpan.FromHours(1));
     }
 
     private async void TimerRefresh(object? state)

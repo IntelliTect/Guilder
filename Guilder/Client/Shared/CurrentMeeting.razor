@@ -2,6 +2,9 @@
 @using System.Globalization;
 
 <div class="card">
+    <div class="float-end" style="float: right">
+        @(RoomName)
+    </div>
     @if (Meeting != null)
     {
         <h1 style="font-size: 6vh"><span class="red-color">@Meeting.Name</span></h1>
@@ -19,4 +22,7 @@
 @code {
     [Parameter]
     public Meeting? Meeting { get; set; }
+
+    [Parameter]
+    public string RoomName { get; set; }
 }
