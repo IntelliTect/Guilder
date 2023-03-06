@@ -1,3 +1,6 @@
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Guilder.Server.Tests.Controllers;
 
 public class MeetingControllerIntegrationTests : IDisposable
@@ -6,20 +9,39 @@ public class MeetingControllerIntegrationTests : IDisposable
 
     private WebApplicationFactory Factory { get; } = new() { Connector = "MicrosoftGraph" };
 
-    [Fact]
+    // [Fact]
+    // Disabling because the created meetings are not deleted
+    // and cannot be, even manually due to permissions.
     public async Task CreateMeeting_NewMeeting_Success()
     {
+        // Used to identify a meeting for deletion.
+        const string methodGuid = "{F209101B-77A3-4D64-B162-A2767EAD5639}";
+        
         Factory.Connector = "MicrosoftGraph";
         
         MeetingClient client = new(Factory.CreateClient());
 
-        Instant expectedStart = new LocalDateTime(2022, 3, 16, 10, 0).InUtc().ToInstant();
-        Instant expectedEnd = new LocalDateTime(2022, 3, 16, 10, 30).InUtc().ToInstant();
-        Meeting expected = new("Name", expectedStart, expectedEnd);
+        DateTime now = DateTime.UtcNow;
+        Instant expectedStart =
+            new LocalDateTime(now.Year, now.Month, now.Day, 12, 0).InUtc().ToInstant();
+        Instant expectedEnd =
+            new LocalDateTime(now.Year, now.Month, now.Day, 12, 30).InUtc().ToInstant();
+        Meeting expected = new($"Guilder - {methodGuid}", expectedStart, expectedEnd);
 
         Meeting? actual = await client.CreateMeeting(BattleOfWits.Id, expected);
 
-        Assert.Equal(expected, actual);
+        Assert.NotNull(actual);
+        try
+        {
+            Assert.Equal(
+                (expected.Name, expected.StartTimeInclusive, expected.EndTimeExclusive),
+                (actual.Name, actual.StartTimeInclusive, actual.EndTimeExclusive));
+        }
+        finally
+        {
+            // TODO: This doesn't currently work.
+            await client.DeleteMeetingAsync(BattleOfWits.Id, actual);
+        }
     }
 
     [Fact]

@@ -17,7 +17,8 @@ public class MeetingsController
 
     [HttpGet("FreeBusy")]
     // Default: Battle Of Wits Room Id
-    public async Task<IReadOnlyList<Meeting>> GetFreeBusy([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId,
+    public async Task<IReadOnlyList<Meeting>> GetFreeBusy(
+        [DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId,
         Instant start, Instant end)
     {
         return await RoomConnector.GetFreeBusyAsync(roomId, start, end);
@@ -25,11 +26,18 @@ public class MeetingsController
 
     [HttpGet()]
     // Default: Battle Of Wits Room Id
-    public async Task<IReadOnlyList<Meeting>> GetMeetings([DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId)
+    public async Task<IReadOnlyList<Meeting>> GetMeetings(
+        [DefaultValue("3a02a800-1e8a-49ef-82f6-be60e1147fdd")] string roomId)
     {
         return await RoomConnector.GetMeetingsAsync(roomId);
     }
 
     [HttpPost]
-    public Task<Meeting> CreateMeeting(string roomId, Meeting meeting) => RoomConnector.CreateMeetingAsync(roomId, meeting);
+    public async Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting) =>
+        await RoomConnector.CreateMeetingAsync(roomId, meeting);
+
+    [HttpPost("delete")]
+    // [HttpDelete] - Currently Meeting doesn't have an id so using Post.
+    public async Task DeleteMeetingAsync(string roomId, Meeting meeting) =>
+        await RoomConnector.DeleteMeetingAsync(roomId, meeting);
 }

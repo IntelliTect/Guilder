@@ -103,52 +103,52 @@ public class GraphConnector : IMeetingRoomConnector
 
     public async Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting)
     {
+        Event appointment = new Event();
+        appointment.Subject = meeting.Name;
+        appointment.Start = meeting.StartTimeInclusive.ToDateTimeOffset().ToDateTimeTimeZone();
+        appointment.End = meeting.EndTimeExclusive.ToDateTimeOffset().ToDateTimeTimeZone();
+        appointment.Body = new ItemBody() { Content = meeting.Description };
+
+        IReadOnlyList<Room> room = await GetRoomsAsync();
+        string? userId = await GetUserId(room.First(item => item.Id == roomId));
+
+        Event? result = await GraphClient.Users[userId].Calendar.Events.PostAsync(appointment);
+
+        if (result is null)
+        {
+            throw new InvalidOperationException("Meeting creation failed");
+        }
+
+        return new Meeting(result.Subject??throw new InvalidOperationException("Subject is null"),
+            Instant.FromDateTimeUtc(result.Start.ToDateTime().ToUniversalTime()),
+            Instant.FromDateTimeUtc(result.End.ToDateTime().ToUniversalTime()),
+            result.Body?.Content
+            );
+    }
+
+    public async Task DeleteMeetingAsync(string roomId, Meeting meeting)
+    {
         try
         {
-            // Room room = (await GetRoomsAsync()).First(item=>item.Id == roomId);
-
-            //graphClient.Places.GraphRoom.
-            //graphClient.Users["{user-id}"].Calendar.Events.PostAsync(new Event());
-
-            //OnlineMeeting requestBody = new OnlineMeeting
-            //{
-            //    StartDateTime = meeting.StartTimeInclusive.ToDateTimeOffset(),
-            //    EndDateTime = meeting.EndTimeExclusive.ToDateTimeOffset(),
-            //    Subject = meeting.Name
-            //};
-
-            Event appointment = new Event();
-            appointment.Subject = meeting.Name;
-            // appointment.Body = new ItemBody(meeting.Description, ContentType.Text);
-            appointment.Start = meeting.StartTimeInclusive.ToDateTimeOffset().ToDateTimeTimeZone();
-            appointment.End = meeting.EndTimeExclusive.ToDateTimeOffset().ToDateTimeTimeZone();
-
             IReadOnlyList<Room> room = await GetRoomsAsync();
-            string? userId = await GetUserId(room.First(item => item.Id == roomId));
+            string userId = (await GetUserId(room.First(item => item.Id == roomId)))
+                ?? throw new InvalidOperationException("User associated with room not found");
 
-            //var result = await GraphClient.Users[userId.Value.First().Id].GetAsync((requestConfiguration) => 
-            //{ 
-            //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual"); 
-            //    requestConfiguration.QueryParameters.Expand = new[] { "calendar" }; 
-            //}); 
-            Event? result = await GraphClient.Users[userId].Calendar.Events.PostAsync(appointment);
+            // TODO: This call is currently failing.
+            List<Event> events = (await GraphClient.Users[userId].Calendar.Events.GetAsync())?.Value??
+                throw new InvalidOperationException("No events found");
 
-            //var calResult = await GraphClient.Users[result.Value.First().Id].Calendar.Events.GetAsync(); 
-
-            //Task<OnlineMeetingCollectionResponse?> user =
-            //    GraphClient.Users[userId].Calendar.GetAsync( (requestConfiguration) =>
-            //{
-            //    requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
-            //});
-
-
-
-            //var result = await me.OnlineMeetings.PostAsync(requestBody);
-            return new Meeting(result.Subject,
-                Instant.FromDateTimeUtc( result.Start.ToDateTime().ToUniversalTime()),
-                Instant.FromDateTimeUtc(result.End.ToDateTime().ToUniversalTime()));
-
-
+            foreach (Event @event in events)
+            {
+                Meeting eachMeeting = new(@event.Subject!,
+                    Instant.FromDateTimeUtc(@event.Start.ToDateTime().ToUniversalTime()),
+                    Instant.FromDateTimeUtc(@event.End.ToDateTime().ToUniversalTime()),
+                    @event.Body?.Content);
+                if (eachMeeting == meeting)
+                {
+                    await GraphClient.Users[userId].Calendar.Events[@event.Id].DeleteAsync();
+                }
+            }
         }
         catch (Exception)
         {

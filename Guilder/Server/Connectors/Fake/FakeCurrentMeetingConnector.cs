@@ -10,6 +10,7 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
     }
 
     public Task<Meeting> CreateMeetingAsync(string roomId, Meeting meeting) => Task.FromResult(meeting);
+    public Task DeleteMeetingAsync(string roomId, Meeting meeting) => Task.CompletedTask;
 
     public Task<IReadOnlyList<Meeting>> GetFreeBusyAsync(string roomId, Instant start, Instant end)
     {
@@ -39,8 +40,8 @@ public class FakeCurrentMeetingConnector : IMeetingRoomConnector
 
     public Task<Room?> GetRoomAsync(string roomId) =>
         GetRoomsAsync().ContinueWith(
-            t => t.Result.FirstOrDefault(r => r.Id == roomId) ??
-            new("-1", "Unknown Fake Room", "hi@intellitect.com"));
+            t => t.Result.First(r => r.Id == roomId) ??
+            new("-1", "Unknown Fake Room", "hi@intellitect.com")) as Task<Room?>;
 
     public Task<IReadOnlyList<Room>> GetRoomsAsync()
     {
